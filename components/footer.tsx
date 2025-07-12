@@ -66,7 +66,7 @@ export function Footer() {
             <div className="mb-6">
               <div className="text-2xl font-bold mb-2">
                 <span className="text-white">IT'S </span>
-                <span className="text-cyan-400">FOSS</span>
+                <span className="text-cyan-400">AFRICA</span>
               </div>
               <p className="text-gray-400 text-sm mb-6">
                 Making You a Better Linux User
@@ -145,11 +145,11 @@ export function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="text-sm text-gray-500 mb-4 lg:mb-0">
-              ©2025 It's FOSS. Hosted on Digital Ocean & Published with Ghost &
+              ©2025 It's AFRICA. Hosted on Digital Ocean & Published with Ghost &
               Rinne.
             </div>
 
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 <span className="text-sm text-gray-500">System</span>
@@ -160,7 +160,7 @@ export function Footer() {
                 </div>
                 Membership
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

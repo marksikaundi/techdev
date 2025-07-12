@@ -55,7 +55,7 @@ export function Header() {
           <Link href="/" className="flex-shrink-0">
             <div className="text-xl font-bold">
               <span className="text-white">IT'S </span>
-              <span className="text-cyan-400">FOSS</span>
+              <span className="text-cyan-400">AFRICA</span>
             </div>
           </Link>
 
