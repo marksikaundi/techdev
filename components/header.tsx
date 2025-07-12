@@ -21,7 +21,7 @@ export function Header() {
       href: "/news",
     },
     {
-      title: "📺 YouTube",
+      title: "📺 YouTube", 
       href: "/youtube",
     },
     {
@@ -48,12 +48,12 @@ export function Header() {
   ];
 
   return (
-    <header className="w-full bg-gray-900 text-white border-b border-gray-800">
+    <header className="w-full bg-gray-900 text-white border-b border-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <div className="text-2xl font-bold">
+            <div className="text-xl font-bold">
               <span className="text-white">IT'S </span>
               <span className="text-cyan-400">FOSS</span>
             </div>
@@ -68,10 +68,10 @@ export function Header() {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium flex items-center gap-1"
+                        className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium flex items-center gap-1 h-8"
                       >
                         {item.title}
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-3 w-3" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-gray-800 border-gray-700">
@@ -89,7 +89,7 @@ export function Header() {
                 ) : (
                   <Link
                     href={item.href}
-                    className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 rounded-md text-sm font-medium transition-colors h-8 flex items-center"
                   >
                     {item.title}
                   </Link>
@@ -99,16 +99,16 @@ export function Header() {
           </nav>
 
           {/* Right side items */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {/* Members Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium items-center gap-1"
+                  className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium items-center gap-1 h-8"
                 >
                   Members
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-gray-800 border-gray-700">
@@ -130,8 +130,7 @@ export function Header() {
             {/* More menu */}
             <Button
               variant="ghost"
-              size="icon"
-              className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800"
+              className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium h-8 items-center"
             >
               •••
             </Button>
@@ -140,14 +139,14 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-gray-300 hover:text-white hover:bg-gray-800"
+              className="text-gray-300 hover:text-white hover:bg-gray-800 h-8 w-8"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-4 w-4" />
             </Button>
 
             {/* Subscribe button */}
-            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 text-sm font-medium rounded-md">
+            <Button className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-1 text-sm font-medium rounded-md h-8">
               Subscribe
             </Button>
 
@@ -157,9 +156,9 @@ export function Header() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="lg:hidden text-gray-300 hover:text-white hover:bg-gray-800"
+                  className="lg:hidden text-gray-300 hover:text-white hover:bg-gray-800 h-8 w-8"
                 >
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="bg-gray-900 border-gray-800 text-white">
@@ -195,20 +194,20 @@ export function Header() {
 
         {/* Search bar */}
         {isSearchOpen && (
-          <div className="py-4 border-t border-gray-800">
+          <div className="py-3 border-t border-gray-800">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                className="w-full bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
               />
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white h-6 w-6"
                 onClick={() => setIsSearchOpen(false)}
               >
-                <X className="h-4 w-4" />
+                <X className="h-3 w-3" />
               </Button>
             </div>
           </div>
