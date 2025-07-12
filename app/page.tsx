@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
@@ -7,14 +13,16 @@ export default function Home() {
   const featuredArticles = [
     {
       title: "Getting Started with Linux for Developers",
-      description: "A comprehensive guide to setting up your Linux development environment",
+      description:
+        "A comprehensive guide to setting up your Linux development environment",
       category: "Linux",
       readTime: "8 min read",
       image: "/placeholder-article.jpg",
     },
     {
       title: "10 Essential Terminal Commands Every Developer Should Know",
-      description: "Master the command line with these powerful terminal commands",
+      description:
+        "Master the command line with these powerful terminal commands",
       category: "Terminal",
       readTime: "5 min read",
       image: "/placeholder-article.jpg",
@@ -37,14 +45,15 @@ export default function Home() {
             {/* Left Content */}
             <div className="space-y-8">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Become a Better{" "}
-                <br />
+                Become a Better <br />
                 <span className="text-white">Developer</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-lg">
-                With the TechDev Weekly Newsletter, you learn useful programming tips, discover applications, explore new frameworks and stay updated with the latest from tech world
+                With the TechDev Weekly Newsletter, you learn useful programming
+                tips, discover applications, explore new frameworks and stay
+                updated with the latest from tech world
               </p>
-              
+
               {/* Newsletter Signup */}
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row gap-3 max-w-md">
@@ -75,16 +84,29 @@ export default function Home() {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     {/* Shadow */}
-                    <ellipse cx="200" cy="380" rx="90" ry="15" fill="#000000" opacity="0.2" />
-                    
+                    <ellipse
+                      cx="200"
+                      cy="380"
+                      rx="90"
+                      ry="15"
+                      fill="#000000"
+                      opacity="0.2"
+                    />
+
                     {/* Penguin Body */}
-                    <ellipse cx="200" cy="270" rx="85" ry="110" fill="#1A202C" />
+                    <ellipse
+                      cx="200"
+                      cy="270"
+                      rx="85"
+                      ry="110"
+                      fill="#1A202C"
+                    />
                     <ellipse cx="200" cy="270" rx="65" ry="90" fill="#FFFFFF" />
-                    
+
                     {/* Penguin Head */}
                     <circle cx="200" cy="140" r="75" fill="#1A202C" />
                     <circle cx="200" cy="145" r="55" fill="#FFFFFF" />
-                    
+
                     {/* Eyes */}
                     <circle cx="185" cy="130" r="12" fill="#000000" />
                     <circle cx="215" cy="130" r="12" fill="#000000" />
@@ -92,55 +114,151 @@ export default function Home() {
                     <circle cx="218" cy="127" r="4" fill="#FFFFFF" />
                     <circle cx="189" cy="125" r="2" fill="#87CEEB" />
                     <circle cx="219" cy="125" r="2" fill="#87CEEB" />
-                    
+
                     {/* Beak */}
-                    <path d="M200 145 L185 160 L200 165 L215 160 Z" fill="#FF8C00" />
-                    <path d="M200 145 L190 155 L200 160 L210 155 Z" fill="#FFA500" />
-                    
+                    <path
+                      d="M200 145 L185 160 L200 165 L215 160 Z"
+                      fill="#FF8C00"
+                    />
+                    <path
+                      d="M200 145 L190 155 L200 160 L210 155 Z"
+                      fill="#FFA500"
+                    />
+
                     {/* Wings */}
-                    <ellipse cx="140" cy="240" rx="30" ry="70" fill="#1A202C" transform="rotate(-25 140 240)" />
-                    <ellipse cx="260" cy="240" rx="30" ry="70" fill="#1A202C" transform="rotate(25 260 240)" />
-                    
+                    <ellipse
+                      cx="140"
+                      cy="240"
+                      rx="30"
+                      ry="70"
+                      fill="#1A202C"
+                      transform="rotate(-25 140 240)"
+                    />
+                    <ellipse
+                      cx="260"
+                      cy="240"
+                      rx="30"
+                      ry="70"
+                      fill="#1A202C"
+                      transform="rotate(25 260 240)"
+                    />
+
                     {/* Belly highlight */}
-                    <ellipse cx="200" cy="260" rx="40" ry="60" fill="#F7FAFC" opacity="0.3" />
-                    
+                    <ellipse
+                      cx="200"
+                      cy="260"
+                      rx="40"
+                      ry="60"
+                      fill="#F7FAFC"
+                      opacity="0.3"
+                    />
+
                     {/* Feet */}
                     <ellipse cx="175" cy="370" rx="25" ry="12" fill="#FF8C00" />
                     <ellipse cx="225" cy="370" rx="25" ry="12" fill="#FF8C00" />
-                    
+
                     {/* Foot details */}
-                    <line x1="160" y1="375" x2="155" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    <line x1="175" y1="375" x2="170" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    <line x1="190" y1="375" x2="195" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    
-                    <line x1="210" y1="375" x2="205" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    <line x1="225" y1="375" x2="230" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    <line x1="240" y1="375" x2="245" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
-                    
+                    <line
+                      x1="160"
+                      y1="375"
+                      x2="155"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="175"
+                      y1="375"
+                      x2="170"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="190"
+                      y1="375"
+                      x2="195"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+
+                    <line
+                      x1="210"
+                      y1="375"
+                      x2="205"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="225"
+                      y1="375"
+                      x2="230"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <line
+                      x1="240"
+                      y1="375"
+                      x2="245"
+                      y2="380"
+                      stroke="#FF6B00"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+
                     {/* Hat/Cap */}
                     <ellipse cx="200" cy="80" rx="50" ry="10" fill="#2D3748" />
-                    <path d="M150 80 Q200 45 250 80 Q225 75 200 75 Q175 75 150 80" fill="#2D3748" />
-                    
+                    <path
+                      d="M150 80 Q200 45 250 80 Q225 75 200 75 Q175 75 150 80"
+                      fill="#2D3748"
+                    />
+
                     {/* Hat details */}
                     <circle cx="175" cy="65" r="5" fill="#4A5568" />
                     <circle cx="200" cy="62" r="5" fill="#4A5568" />
                     <circle cx="225" cy="65" r="5" fill="#4A5568" />
-                    
+
                     {/* Cheek blush */}
-                    <circle cx="150" cy="155" r="8" fill="#FFB6C1" opacity="0.4" />
-                    <circle cx="250" cy="155" r="8" fill="#FFB6C1" opacity="0.4" />
+                    <circle
+                      cx="150"
+                      cy="155"
+                      r="8"
+                      fill="#FFB6C1"
+                      opacity="0.4"
+                    />
+                    <circle
+                      cx="250"
+                      cy="155"
+                      r="8"
+                      fill="#FFB6C1"
+                      opacity="0.4"
+                    />
                   </svg>
                 </div>
-                
+
                 {/* Floating Elements */}
                 <div className="absolute top-10 right-10 w-6 h-6 bg-cyan-400 rounded-full opacity-60 floating-particle"></div>
-                <div className="absolute bottom-20 left-5 w-4 h-4 bg-cyan-300 rounded-full opacity-40 floating-particle" style={{animationDelay: '1s'}}></div>
-                <div className="absolute top-1/2 right-5 w-3 h-3 bg-white rounded-full opacity-50 floating-particle" style={{animationDelay: '0.5s'}}></div>
+                <div
+                  className="absolute bottom-20 left-5 w-4 h-4 bg-cyan-300 rounded-full opacity-40 floating-particle"
+                  style={{ animationDelay: "1s" }}
+                ></div>
+                <div
+                  className="absolute top-1/2 right-5 w-3 h-3 bg-white rounded-full opacity-50 floating-particle"
+                  style={{ animationDelay: "0.5s" }}
+                ></div>
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-20 left-20 w-32 h-32 border border-white rounded-full"></div>
@@ -157,24 +275,33 @@ export default function Home() {
               Featured Articles
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Stay up to date with the latest tutorials, guides, and insights from the world of technology.
+              Stay up to date with the latest tutorials, guides, and insights
+              from the world of technology.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredArticles.map((article, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card
+                key={index}
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+              >
                 <div className="aspect-video bg-gray-200 rounded-t-lg"></div>
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="secondary">{article.category}</Badge>
-                    <span className="text-sm text-gray-500">{article.readTime}</span>
+                    <span className="text-sm text-gray-500">
+                      {article.readTime}
+                    </span>
                   </div>
                   <CardTitle className="text-xl">{article.title}</CardTitle>
                   <CardDescription>{article.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Link href="#" className="text-cyan-600 hover:text-cyan-700 font-medium">
+                  <Link
+                    href="#"
+                    className="text-cyan-600 hover:text-cyan-700 font-medium"
+                  >
                     Read more →
                   </Link>
                 </CardContent>
@@ -191,7 +318,8 @@ export default function Home() {
             Stay Updated
           </h2>
           <p className="text-lg text-gray-600 mb-8">
-            Get the latest articles, tutorials, and tech news delivered to your inbox.
+            Get the latest articles, tutorials, and tech news delivered to your
+            inbox.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
             <input
@@ -228,14 +356,16 @@ export default function Home() {
               "🛠️ DevOps",
               "🎮 Gaming",
               "🔧 Tools",
-              "📚 Tutorials"
+              "📚 Tutorials",
             ].map((category) => (
               <Link
                 key={category}
                 href="#"
                 className="bg-white border border-gray-200 rounded-lg p-4 text-center hover:shadow-md hover:border-cyan-500 transition-all"
               >
-                <span className="text-sm font-medium text-gray-700">{category}</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {category}
+                </span>
               </Link>
             ))}
           </div>

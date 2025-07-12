@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Github, 
-  Youtube, 
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Github,
+  Youtube,
   MessageCircle,
   Rss,
-  Send
+  Send,
 } from "lucide-react";
 
 export function Footer() {
@@ -68,9 +68,11 @@ export function Footer() {
                 <span className="text-white">IT'S </span>
                 <span className="text-cyan-400">FOSS</span>
               </div>
-              <p className="text-gray-400 text-sm mb-6">Making You a Better Linux User</p>
+              <p className="text-gray-400 text-sm mb-6">
+                Making You a Better Linux User
+              </p>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-3">
                 <Input
@@ -87,7 +89,9 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-6">Navigation</h3>
+            <h3 className="text-white font-semibold text-lg mb-6">
+              Navigation
+            </h3>
             <ul className="space-y-3">
               {navigationLinks.map((link) => (
                 <li key={link.title}>
@@ -141,9 +145,10 @@ export function Footer() {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="text-sm text-gray-500 mb-4 lg:mb-0">
-              ©2025 It's FOSS. Hosted on Digital Ocean & Published with Ghost & Rinne.
+              ©2025 It's FOSS. Hosted on Digital Ocean & Published with Ghost &
+              Rinne.
             </div>
-            
+
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>

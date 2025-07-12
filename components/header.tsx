@@ -17,31 +17,31 @@ export function Header() {
 
   const navigationItems = [
     {
-      title: "📰 News",
+      title: "News",
       href: "/news",
     },
     {
-      title: "📺 YouTube", 
+      title: "YouTube",
       href: "/youtube",
     },
     {
-      title: "📧 Newsletter",
+      title: "Newsletter",
       href: "/newsletter",
     },
     {
-      title: "🧩 Quizzes & Puzzles",
+      title: "Puzzles",
       href: "/quizzes",
     },
     {
-      title: "🎒 Resources",
+      title: "Resources",
       href: "/resources",
     },
     {
-      title: "👥 Community",
+      title: "Community",
       href: "/community",
     },
     {
-      title: "💻 About",
+      title: "About",
       href: "/about",
       hasDropdown: true,
     },
@@ -161,7 +161,10 @@ export function Header() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-gray-900 border-gray-800 text-white">
+              <SheetContent
+                side="right"
+                className="bg-gray-900 border-gray-800 text-white"
+              >
                 <div className="flex flex-col space-y-4 mt-8">
                   {navigationItems.map((item) => (
                     <Link
