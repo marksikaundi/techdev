@@ -14,38 +14,14 @@ import {
 
 export function Footer() {
   const navigationLinks = [
-    {
-      title: "📰 News",
-      href: "/news",
-    },
-    {
-      title: "📺 YouTube",
-      href: "/youtube",
-    },
-    {
-      title: "📧 Newsletter",
-      href: "/newsletter",
-    },
-    {
-      title: "🧩 Quizzes & Puzzles",
-      href: "/quizzes",
-    },
-    {
-      title: "🎒 Resources",
-      href: "/resources",
-    },
-    {
-      title: "👥 Community",
-      href: "/community",
-    },
-    {
-      title: "💻 About",
-      href: "/about",
-    },
-    {
-      title: "📞 Contact",
-      href: "/contact",
-    },
+    { title: "📰 News", href: "/news" },
+    { title: "📺 YouTube", href: "/youtube" },
+    { title: "📧 Newsletter", href: "/newsletter" },
+    { title: "🧩 Quizzes & Puzzles", href: "/quizzes" },
+    { title: "🎒 Resources", href: "/resources" },
+    { title: "👥 Community", href: "/community" },
+    { title: "💻 About", href: "/about" },
+    { title: "📞 Contact", href: "/contact" },
   ];
 
   const resourceLinks = [
