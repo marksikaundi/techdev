@@ -65,9 +65,9 @@ export default function Home() {
 
             {/* Right Content - Penguin Illustration */}
             <div className="relative flex justify-center lg:justify-end">
-              <div className="relative w-80 h-80 lg:w-96 lg:h-96">
+              <div className="relative w-80 h-80 lg:w-96 lg:h-96 penguin-float">
                 {/* Penguin SVG */}
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center penguin-wiggle">
                   <svg
                     viewBox="0 0 400 400"
                     className="w-full h-full drop-shadow-2xl"
@@ -109,9 +109,9 @@ export default function Home() {
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute top-10 right-10 w-6 h-6 bg-cyan-400 rounded-full opacity-60 animate-pulse"></div>
-                <div className="absolute bottom-20 left-5 w-4 h-4 bg-cyan-300 rounded-full opacity-40 animate-pulse delay-1000"></div>
-                <div className="absolute top-1/2 right-5 w-3 h-3 bg-white rounded-full opacity-50 animate-pulse delay-500"></div>
+                <div className="absolute top-10 right-10 w-6 h-6 bg-cyan-400 rounded-full opacity-60 floating-particle"></div>
+                <div className="absolute bottom-20 left-5 w-4 h-4 bg-cyan-300 rounded-full opacity-40 floating-particle" style={{animationDelay: '1s'}}></div>
+                <div className="absolute top-1/2 right-5 w-3 h-3 bg-white rounded-full opacity-50 floating-particle" style={{animationDelay: '0.5s'}}></div>
               </div>
             </div>
           </div>
