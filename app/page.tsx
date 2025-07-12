@@ -74,37 +74,61 @@ export default function Home() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
+                    {/* Shadow */}
+                    <ellipse cx="200" cy="380" rx="90" ry="15" fill="#000000" opacity="0.2" />
+                    
                     {/* Penguin Body */}
-                    <ellipse cx="200" cy="280" rx="80" ry="100" fill="#2D3748" />
-                    <ellipse cx="200" cy="280" rx="60" ry="80" fill="#FFFFFF" />
+                    <ellipse cx="200" cy="270" rx="85" ry="110" fill="#1A202C" />
+                    <ellipse cx="200" cy="270" rx="65" ry="90" fill="#FFFFFF" />
                     
                     {/* Penguin Head */}
-                    <circle cx="200" cy="150" r="70" fill="#2D3748" />
-                    <circle cx="200" cy="150" r="50" fill="#FFFFFF" />
+                    <circle cx="200" cy="140" r="75" fill="#1A202C" />
+                    <circle cx="200" cy="145" r="55" fill="#FFFFFF" />
                     
                     {/* Eyes */}
-                    <circle cx="185" cy="140" r="8" fill="#000000" />
-                    <circle cx="215" cy="140" r="8" fill="#000000" />
-                    <circle cx="187" cy="138" r="3" fill="#FFFFFF" />
-                    <circle cx="217" cy="138" r="3" fill="#FFFFFF" />
+                    <circle cx="185" cy="130" r="12" fill="#000000" />
+                    <circle cx="215" cy="130" r="12" fill="#000000" />
+                    <circle cx="188" cy="127" r="4" fill="#FFFFFF" />
+                    <circle cx="218" cy="127" r="4" fill="#FFFFFF" />
+                    <circle cx="189" cy="125" r="2" fill="#87CEEB" />
+                    <circle cx="219" cy="125" r="2" fill="#87CEEB" />
                     
                     {/* Beak */}
-                    <polygon points="200,155 190,165 210,165" fill="#F6AD55" />
+                    <path d="M200 145 L185 160 L200 165 L215 160 Z" fill="#FF8C00" />
+                    <path d="M200 145 L190 155 L200 160 L210 155 Z" fill="#FFA500" />
                     
                     {/* Wings */}
-                    <ellipse cx="150" cy="250" rx="25" ry="60" fill="#2D3748" transform="rotate(-20 150 250)" />
-                    <ellipse cx="250" cy="250" rx="25" ry="60" fill="#2D3748" transform="rotate(20 250 250)" />
+                    <ellipse cx="140" cy="240" rx="30" ry="70" fill="#1A202C" transform="rotate(-25 140 240)" />
+                    <ellipse cx="260" cy="240" rx="30" ry="70" fill="#1A202C" transform="rotate(25 260 240)" />
+                    
+                    {/* Belly highlight */}
+                    <ellipse cx="200" cy="260" rx="40" ry="60" fill="#F7FAFC" opacity="0.3" />
                     
                     {/* Feet */}
-                    <ellipse cx="180" cy="360" rx="20" ry="10" fill="#F6AD55" />
-                    <ellipse cx="220" cy="360" rx="20" ry="10" fill="#F6AD55" />
+                    <ellipse cx="175" cy="370" rx="25" ry="12" fill="#FF8C00" />
+                    <ellipse cx="225" cy="370" rx="25" ry="12" fill="#FF8C00" />
                     
-                    {/* Hat */}
-                    <ellipse cx="200" cy="90" rx="45" ry="8" fill="#2D3748" />
-                    <path d="M155 90 Q200 60 245 90 Q200 85 155 90" fill="#2D3748" />
-                    <circle cx="180" cy="75" r="4" fill="#4A5568" />
-                    <circle cx="200" cy="72" r="4" fill="#4A5568" />
-                    <circle cx="220" cy="75" r="4" fill="#4A5568" />
+                    {/* Foot details */}
+                    <line x1="160" y1="375" x2="155" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    <line x1="175" y1="375" x2="170" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    <line x1="190" y1="375" x2="195" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    
+                    <line x1="210" y1="375" x2="205" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    <line x1="225" y1="375" x2="230" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    <line x1="240" y1="375" x2="245" y2="380" stroke="#FF6B00" strokeWidth="3" strokeLinecap="round" />
+                    
+                    {/* Hat/Cap */}
+                    <ellipse cx="200" cy="80" rx="50" ry="10" fill="#2D3748" />
+                    <path d="M150 80 Q200 45 250 80 Q225 75 200 75 Q175 75 150 80" fill="#2D3748" />
+                    
+                    {/* Hat details */}
+                    <circle cx="175" cy="65" r="5" fill="#4A5568" />
+                    <circle cx="200" cy="62" r="5" fill="#4A5568" />
+                    <circle cx="225" cy="65" r="5" fill="#4A5568" />
+                    
+                    {/* Cheek blush */}
+                    <circle cx="150" cy="155" r="8" fill="#FFB6C1" opacity="0.4" />
+                    <circle cx="250" cy="155" r="8" fill="#FFB6C1" opacity="0.4" />
                   </svg>
                 </div>
                 
