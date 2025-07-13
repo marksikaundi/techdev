@@ -73,18 +73,26 @@ const categoryFormSchema = z.object({
 });
 
 export default function AdminCategories() {
-  const { categories: convexCategories, categoryCounts, createCategory, updateCategory, deleteCategory } = useCategoriesAdmin();
-  
+  const {
+    categories: convexCategories,
+    categoryCounts,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+  } = useCategoriesAdmin();
+
   // Map Convex data to our component state format
-  const categories = convexCategories && categoryCounts 
-    ? convexCategories.map(category => ({
-        id: category._id,
-        name: category.name,
-        slug: category.slug,
-        description: category.description || "",
-        postsCount: categoryCounts.find(c => c.slug === category.slug)?.count || 0
-      }))
-    : [];
+  const categories =
+    convexCategories && categoryCounts
+      ? convexCategories.map((category) => ({
+          id: category._id,
+          name: category.name,
+          slug: category.slug,
+          description: category.description || "",
+          postsCount:
+            categoryCounts.find((c) => c.slug === category.slug)?.count || 0,
+        }))
+      : [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -93,7 +101,8 @@ export default function AdminCategories() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Check if data is still loading
-  const isDataLoading = convexCategories === undefined || categoryCounts === undefined;
+  const isDataLoading =
+    convexCategories === undefined || categoryCounts === undefined;
 
   // Initialize form
   const form = useForm<z.infer<typeof categoryFormSchema>>({
@@ -115,16 +124,16 @@ export default function AdminCategories() {
 
     if (editingCategory) {
       // Update existing category in Convex
-      if (typeof editingCategory.id === 'number') {
+      if (typeof editingCategory.id === "number") {
         // This is a temporary ID, cannot update in Convex
         return;
       }
-      
+
       updateCategory({
         id: editingCategory.id,
         name: formattedValues.name,
         slug: formattedValues.slug,
-        description: formattedValues.description
+        description: formattedValues.description,
       });
       setIsEditOpen(false);
     } else {
@@ -132,7 +141,7 @@ export default function AdminCategories() {
       createCategory({
         name: formattedValues.name,
         slug: formattedValues.slug,
-        description: formattedValues.description
+        description: formattedValues.description,
       });
       setIsAddOpen(false);
     }
@@ -147,11 +156,11 @@ export default function AdminCategories() {
       "Are you sure you want to delete this category?"
     );
     if (confirmDelete) {
-      if (typeof id === 'number') {
+      if (typeof id === "number") {
         // This is a temporary ID, no need to call Convex
         return;
       }
-      
+
       // Delete from Convex database
       deleteCategory({ id });
     }
@@ -396,7 +405,9 @@ export default function AdminCategories() {
         </div>
       ) : categories.length === 0 ? (
         <div className="flex justify-center items-center py-12">
-          <p className="text-gray-500">No categories found. Create your first category!</p>
+          <p className="text-gray-500">
+            No categories found. Create your first category!
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
@@ -405,53 +416,53 @@ export default function AdminCategories() {
               cat.name.toLowerCase().includes(searchQuery.toLowerCase())
             )
             .map((category) => (
-            <Card key={category.id} className="p-4 border-gray-200 relative">
-              <div className="absolute top-4 right-4">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() => handleEditCategory(category)}
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDeleteCategory(category.id)}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="mb-2 flex items-center">
-                <Tag className="h-5 w-5 text-cyan-500 mr-2" />
-                <h3 className="font-semibold text-lg">{category.name}</h3>
-              </div>
-              <p className="text-gray-500 text-sm mb-4">
-                {category.description || "No description"}
-              </p>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center text-gray-500 text-sm">
-                  <Hash className="h-3 w-3 mr-1" />
-                  {category.slug}
+              <Card key={category.id} className="p-4 border-gray-200 relative">
+                <div className="absolute top-4 right-4">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => handleEditCategory(category)}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => handleDeleteCategory(category.id)}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-                <div className="flex items-center">
-                  <BookOpen className="h-4 w-4 text-gray-400 mr-1" />
-                  <span className="text-sm text-gray-600">
-                    {category.postsCount}{" "}
-                    {category.postsCount === 1 ? "post" : "posts"}
-                  </span>
+                <div className="mb-2 flex items-center">
+                  <Tag className="h-5 w-5 text-cyan-500 mr-2" />
+                  <h3 className="font-semibold text-lg">{category.name}</h3>
                 </div>
-              </div>
-            </Card>
-          ))}
+                <p className="text-gray-500 text-sm mb-4">
+                  {category.description || "No description"}
+                </p>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Hash className="h-3 w-3 mr-1" />
+                    {category.slug}
+                  </div>
+                  <div className="flex items-center">
+                    <BookOpen className="h-4 w-4 text-gray-400 mr-1" />
+                    <span className="text-sm text-gray-600">
+                      {category.postsCount}{" "}
+                      {category.postsCount === 1 ? "post" : "posts"}
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            ))}
         </div>
       )}
 
@@ -474,34 +485,39 @@ export default function AdminCategories() {
               )
               .sort((a, b) => b.postsCount - a.postsCount)
               .map((category) => (
-              <div key={category.id}>
-                <div className="flex justify-between items-center mb-1">
-                  <div className="flex items-center">
-                    <Folder className="h-4 w-4 text-gray-400 mr-2" />
-                    <span className="font-medium">{category.name}</span>
+                <div key={category.id}>
+                  <div className="flex justify-between items-center mb-1">
+                    <div className="flex items-center">
+                      <Folder className="h-4 w-4 text-gray-400 mr-2" />
+                      <span className="font-medium">{category.name}</span>
+                    </div>
+                    <span className="text-gray-500 text-sm">
+                      {category.postsCount}{" "}
+                      {category.postsCount === 1 ? "post" : "posts"}
+                    </span>
                   </div>
-                  <span className="text-gray-500 text-sm">
-                    {category.postsCount}{" "}
-                    {category.postsCount === 1 ? "post" : "posts"}
-                  </span>
-                </div>
-                <div className="relative pt-1">
-                  <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
-                    <div
-                      style={{
-                        width: `${Math.min(
-                          // Calculate percentage based on max post count
-                          (category.postsCount / Math.max(...categories.map(c => c.postsCount), 1)) * 100,
-                          100
-                        )}%`,
-                      }}
-                      className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-cyan-500"
-                    ></div>
+                  <div className="relative pt-1">
+                    <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
+                      <div
+                        style={{
+                          width: `${Math.min(
+                            // Calculate percentage based on max post count
+                            (category.postsCount /
+                              Math.max(
+                                ...categories.map((c) => c.postsCount),
+                                1
+                              )) *
+                              100,
+                            100
+                          )}%`,
+                        }}
+                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-cyan-500"
+                      ></div>
+                    </div>
                   </div>
+                  <Separator className="mt-4" />
                 </div>
-                <Separator className="mt-4" />
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </Card>

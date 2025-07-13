@@ -14,10 +14,10 @@ import { capitalize } from "@/lib/utils";
 export default function PostPage({ params }: { params: { postId: string } }) {
   const router = useRouter();
   const { deletePost } = usePostsAdmin();
-  
+
   // Get the post data directly from Convex
   const postData = usePostsAdmin().getPost(params.postId as Id<"posts">);
-  
+
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Format date from ISO string
@@ -40,11 +40,11 @@ export default function PostPage({ params }: { params: { postId: string } }) {
   // Handle delete post
   const handleDeletePost = async () => {
     if (!postData) return;
-    
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this post?"
     );
-    
+
     if (confirmDelete) {
       setIsDeleting(true);
       try {
