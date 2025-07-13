@@ -13,6 +13,7 @@ import {
   Grid,
   LogOut,
   Kanban,
+  FolderKanban,
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -51,7 +52,7 @@ export default function AdminLayout({
     {
       name: "Studio",
       href: "/admin/studio",
-      icon: Kanban,
+      icon: FolderKanban,
     },
     {
       name: "Analytics",
