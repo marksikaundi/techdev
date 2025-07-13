@@ -4,38 +4,67 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { 
-  DndContext, 
+import {
+  DndContext,
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
   MouseSensor,
   TouchSensor,
   useSensor,
-  useSensors
+  useSensors,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  LayoutGrid, 
-  Plus, 
-  Pencil, 
-  Trash2, 
-  MoveHorizontal, 
-  Calendar, 
-  Users, 
-  CheckCircle2, 
-  Clock
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  LayoutGrid,
+  Plus,
+  Pencil,
+  Trash2,
+  MoveHorizontal,
+  Calendar,
+  Users,
+  CheckCircle2,
+  Clock,
 } from "lucide-react";
 
 // Schema for task creation/editing
@@ -195,17 +224,21 @@ export default function StudioPage() {
       const task = findTaskById(activeTaskId);
       if (task) {
         // Remove task from its current board
-        const updatedBoards = boards.map(board => ({
+        const updatedBoards = boards.map((board) => ({
           ...board,
-          tasks: board.tasks.filter(t => t.id !== activeTaskId)
+          tasks: board.tasks.filter((t) => t.id !== activeTaskId),
         }));
 
         // Add task to the new board
-        const targetBoardIndex = updatedBoards.findIndex(b => b.id === overBoardId);
+        const targetBoardIndex = updatedBoards.findIndex(
+          (b) => b.id === overBoardId
+        );
         if (targetBoardIndex !== -1) {
           updatedBoards[targetBoardIndex].tasks.push({
             ...task,
-            status: updatedBoards[targetBoardIndex].title.toLowerCase().replace(/\\s+/g, '-')
+            status: updatedBoards[targetBoardIndex].title
+              .toLowerCase()
+              .replace(/\\s+/g, "-"),
           });
           setBoards(updatedBoards);
         }
@@ -216,7 +249,7 @@ export default function StudioPage() {
   // Helper to find a task by ID across all boards
   const findTaskById = (taskId: string): Task | undefined => {
     for (const board of boards) {
-      const task = board.tasks.find(t => t.id === taskId);
+      const task = board.tasks.find((t) => t.id === taskId);
       if (task) return task;
     }
     return undefined;
@@ -250,12 +283,12 @@ export default function StudioPage() {
       createdAt: new Date(),
     };
 
-    const updatedBoards = boards.map(board => 
-      board.id === currentBoardId 
+    const updatedBoards = boards.map((board) =>
+      board.id === currentBoardId
         ? { ...board, tasks: [...board.tasks, newTask] }
         : board
     );
-    
+
     setBoards(updatedBoards);
     setIsAddingTask(false);
     setCurrentBoardId(null);
@@ -266,12 +299,12 @@ export default function StudioPage() {
   const onEditTask = (data: z.infer<typeof taskSchema>) => {
     if (!editingTask) return;
 
-    const updatedBoards = boards.map(board => ({
+    const updatedBoards = boards.map((board) => ({
       ...board,
-      tasks: board.tasks.map(task => 
-        task.id === editingTask.id 
-          ? { 
-              ...task, 
+      tasks: board.tasks.map((task) =>
+        task.id === editingTask.id
+          ? {
+              ...task,
               title: data.title,
               description: data.description || "",
               priority: data.priority,
@@ -279,9 +312,9 @@ export default function StudioPage() {
               assignee: data.assignee || "",
             }
           : task
-      )
+      ),
     }));
-    
+
     setBoards(updatedBoards);
     setEditingTask(null);
     taskForm.reset();
@@ -289,17 +322,17 @@ export default function StudioPage() {
 
   // Delete a task
   const onDeleteTask = (taskId: string) => {
-    const updatedBoards = boards.map(board => ({
+    const updatedBoards = boards.map((board) => ({
       ...board,
-      tasks: board.tasks.filter(task => task.id !== taskId)
+      tasks: board.tasks.filter((task) => task.id !== taskId),
     }));
-    
+
     setBoards(updatedBoards);
   };
 
   // Delete a board
   const onDeleteBoard = (boardId: string) => {
-    setBoards(boards.filter(board => board.id !== boardId));
+    setBoards(boards.filter((board) => board.id !== boardId));
   };
 
   // Reset and prepare forms for editing
@@ -343,7 +376,7 @@ export default function StudioPage() {
       </div>
 
       {/* Kanban Board Container */}
-      <DndContext 
+      <DndContext
         sensors={sensors}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
@@ -357,14 +390,18 @@ export default function StudioPage() {
                   <CardDescription>{board.description}</CardDescription>
                 </div>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" onClick={() => {
-                    setCurrentBoardId(board.id);
-                    setIsAddingTask(true);
-                  }}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setCurrentBoardId(board.id);
+                      setIsAddingTask(true);
+                    }}
+                  >
                     <Plus className="h-4 w-4" />
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     onClick={() => onDeleteBoard(board.id)}
                   >
@@ -374,7 +411,7 @@ export default function StudioPage() {
               </CardHeader>
               <CardContent className="p-4 h-[500px] overflow-y-auto">
                 <SortableContext
-                  items={board.tasks.map(task => task.id)}
+                  items={board.tasks.map((task) => task.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   {board.tasks.map((task) => (
@@ -386,15 +423,15 @@ export default function StudioPage() {
                       <div className="flex justify-between items-start">
                         <h3 className="font-medium">{task.title}</h3>
                         <div className="flex space-x-2">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
+                          <Button
+                            variant="ghost"
+                            size="sm"
                             onClick={() => prepareTaskForEdit(task)}
                           >
                             <Pencil className="h-3 w-3" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => onDeleteTask(task.id)}
                           >
@@ -403,10 +440,16 @@ export default function StudioPage() {
                         </div>
                       </div>
                       {task.description && (
-                        <p className="text-sm text-gray-600 mt-1">{task.description}</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {task.description}
+                        </p>
                       )}
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(task.priority)}`}>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(
+                            task.priority
+                          )}`}
+                        >
                           {task.priority}
                         </span>
                         {task.dueDate && (
@@ -428,7 +471,7 @@ export default function StudioPage() {
               </CardContent>
               <CardFooter className="p-4 border-t">
                 <div className="text-sm text-gray-500">
-                  {board.tasks.length} task{board.tasks.length !== 1 ? 's' : ''}
+                  {board.tasks.length} task{board.tasks.length !== 1 ? "s" : ""}
                 </div>
               </CardFooter>
             </Card>
@@ -443,10 +486,16 @@ export default function StudioPage() {
                 <h3 className="font-medium">{activeTask.title}</h3>
               </div>
               {activeTask.description && (
-                <p className="text-sm text-gray-600 mt-1">{activeTask.description}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {activeTask.description}
+                </p>
               )}
               <div className="mt-3 flex flex-wrap gap-2">
-                <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(activeTask.priority)}`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(
+                    activeTask.priority
+                  )}`}
+                >
                   {activeTask.priority}
                 </span>
               </div>
@@ -465,7 +514,10 @@ export default function StudioPage() {
             </DialogDescription>
           </DialogHeader>
           <Form {...boardForm}>
-            <form onSubmit={boardForm.handleSubmit(onAddBoard)} className="space-y-4">
+            <form
+              onSubmit={boardForm.handleSubmit(onAddBoard)}
+              className="space-y-4"
+            >
               <FormField
                 control={boardForm.control}
                 name="title"
@@ -486,10 +538,10 @@ export default function StudioPage() {
                   <FormItem>
                     <FormLabel>Description (Optional)</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="Enter board description" 
-                        className="resize-none" 
-                        {...field} 
+                      <Textarea
+                        placeholder="Enter board description"
+                        className="resize-none"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -497,10 +549,14 @@ export default function StudioPage() {
                 )}
               />
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => {
-                  setIsAddingBoard(false);
-                  boardForm.reset();
-                }}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsAddingBoard(false);
+                    boardForm.reset();
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit">Create Board</Button>
@@ -511,8 +567,8 @@ export default function StudioPage() {
       </Dialog>
 
       {/* Add/Edit Task Dialog */}
-      <Dialog 
-        open={isAddingTask || editingTask !== null} 
+      <Dialog
+        open={isAddingTask || editingTask !== null}
         onOpenChange={(open) => {
           if (!open) {
             setIsAddingTask(false);
@@ -527,15 +583,16 @@ export default function StudioPage() {
               {editingTask ? "Edit Task" : "Add New Task"}
             </DialogTitle>
             <DialogDescription>
-              {editingTask 
-                ? "Update task details" 
-                : "Create a new task for your project"
-              }
+              {editingTask
+                ? "Update task details"
+                : "Create a new task for your project"}
             </DialogDescription>
           </DialogHeader>
           <Form {...taskForm}>
-            <form 
-              onSubmit={taskForm.handleSubmit(editingTask ? onEditTask : onAddTask)} 
+            <form
+              onSubmit={taskForm.handleSubmit(
+                editingTask ? onEditTask : onAddTask
+              )}
               className="space-y-4"
             >
               <FormField
@@ -558,10 +615,10 @@ export default function StudioPage() {
                   <FormItem>
                     <FormLabel>Description (Optional)</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="Enter task description" 
-                        className="resize-none" 
-                        {...field} 
+                      <Textarea
+                        placeholder="Enter task description"
+                        className="resize-none"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -575,8 +632,8 @@ export default function StudioPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Priority</FormLabel>
-                      <Select 
-                        onValueChange={field.onChange} 
+                      <Select
+                        onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -622,11 +679,15 @@ export default function StudioPage() {
                 )}
               />
               <DialogFooter>
-                <Button type="button" variant="outline" onClick={() => {
-                  setIsAddingTask(false);
-                  setEditingTask(null);
-                  taskForm.reset();
-                }}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsAddingTask(false);
+                    setEditingTask(null);
+                    taskForm.reset();
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit">

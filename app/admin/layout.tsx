@@ -58,11 +58,6 @@ export default function AdminLayout({
       href: "/admin/analytics",
       icon: BarChart,
     },
-    {
-      name: "Settings",
-      href: "/admin/settings",
-      icon: Settings,
-    },
   ];
 
   return (
