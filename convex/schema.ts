@@ -62,4 +62,27 @@ export default defineSchema({
   })
     .index("by_postId", ["postId"])
     .index("by_status", ["status"]),
+
+  // Planning Studio Boards table
+  planningBoards: defineTable({
+    title: v.string(),
+    description: v.optional(v.string()),
+    order: v.number(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  }),
+
+  // Planning Studio Tasks table
+  planningTasks: defineTable({
+    boardId: v.id("planningBoards"),
+    title: v.string(),
+    description: v.optional(v.string()),
+    priority: v.string(), // "low", "medium", "high"
+    status: v.string(),
+    dueDate: v.optional(v.string()),
+    assignee: v.optional(v.string()),
+    order: v.number(),
+    createdAt: v.string(),
+    updatedAt: v.string(),
+  }).index("by_boardId", ["boardId"]),
 });

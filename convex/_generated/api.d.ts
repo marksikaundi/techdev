@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as mutations from "../mutations.js";
+import type * as planning from "../planning.js";
 import type * as queries from "../queries.js";
 import type * as seed from "../seed.js";
 
@@ -27,6 +28,7 @@ import type * as seed from "../seed.js";
  */
 declare const fullApi: ApiFromModules<{
   mutations: typeof mutations;
+  planning: typeof planning;
   queries: typeof queries;
   seed: typeof seed;
 }>;
