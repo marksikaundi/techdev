@@ -55,7 +55,9 @@ export default async function EditBlogPage({
       <div className="flex-1 p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Edit Blog</h1>
-          <p className="text-muted-foreground">Make changes to your blog post</p>
+          <p className="text-muted-foreground">
+            Make changes to your blog post
+          </p>
         </div>
 
         <BlogClientWrapper
@@ -69,7 +71,7 @@ export default async function EditBlogPage({
 }
 
 // Client component wrapper to handle Convex queries
-"use client";
+("use client");
 
 import { useQuery } from "convex/react";
 import { Skeleton } from "@/components/ui/skeleton";

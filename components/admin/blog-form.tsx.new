@@ -25,18 +25,33 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-// Define the form schema
+// Form schema definition with Zod
 const formSchema = z.object({
-  title: z.string().min(5).max(100),
-  content: z.string().min(20),
-  imageUrl: z.string().url().optional().or(z.literal("")),
-  published: z.boolean(),
+  title: z
+    .string()
+    .min(5, {
+      message: "Title must be at least 5 characters.",
+    })
+    .max(100, {
+      message: "Title must not exceed 100 characters.",
+    }),
+  content: z.string().min(20, {
+    message: "Content must be at least 20 characters.",
+  }),
+  imageUrl: z
+    .string()
+    .url({
+      message: "Please enter a valid URL.",
+    })
+    .optional()
+    .or(z.literal("")),
+  published: z.boolean().default(false),
 });
 
-// Infer the form type from the schema
+// Type derived from the schema
 type BlogFormValues = z.infer<typeof formSchema>;
 
-// Define props interface
+// Type for the component props
 interface BlogFormProps {
   userId: string;
   userName: string;
@@ -53,23 +68,28 @@ export function BlogForm({ userId, userName, initialData }: BlogFormProps) {
   const router = useRouter();
   const createBlog = useMutation(api.blogs.createBlog);
   const updateBlog = useMutation(api.blogs.updateBlog);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Initialize the form
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: initialData?.title || "",
-      content: initialData?.content || "",
-      imageUrl: initialData?.imageUrl || "",
-      published: initialData?.published || false,
-    },
+    defaultValues: initialData
+      ? {
+          title: initialData.title,
+          content: initialData.content,
+          imageUrl: initialData.imageUrl || "",
+          published: initialData.published,
+        }
+      : {
+          title: "",
+          content: "",
+          imageUrl: "",
+          published: false,
+        },
   });
 
-  // Form submission handler
-  const onSubmit = async (values: BlogFormValues) => {
+  async function onSubmit(values: BlogFormValues) {
     setIsSubmitting(true);
-
     try {
       if (initialData) {
         // Update existing blog
@@ -100,7 +120,7 @@ export function BlogForm({ userId, userName, initialData }: BlogFormProps) {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }
 
   return (
     <Card>
