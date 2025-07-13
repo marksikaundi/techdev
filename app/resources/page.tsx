@@ -441,8 +441,8 @@ export default function ResourcesPage() {
                   </h3>
                   <p className="text-gray-600 mb-4">
                     Are you an expert in web development? We welcome
-                    contributions to our resources. Share your knowledge and help
-                    others learn!
+                    contributions to our resources. Share your knowledge and
+                    help others learn!
                   </p>
                   <Link href="/contribute">
                     <Button

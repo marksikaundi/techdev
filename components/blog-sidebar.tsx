@@ -43,7 +43,8 @@ export function BlogSidebar() {
       date: "10 June 2025",
     },
     {
-      title: "How to Build a Real-time Chat Application with Next.js and Socket.IO",
+      title:
+        "How to Build a Real-time Chat Application with Next.js and Socket.IO",
       url: "/blog/realtime-chat-nextjs",
       date: "5 June 2025",
     },
@@ -60,7 +61,8 @@ export function BlogSidebar() {
       <Card className="p-6 bg-gray-50 border border-gray-200">
         <h3 className="text-lg font-bold text-gray-900 mb-3">About TechDev</h3>
         <p className="text-gray-600 text-sm mb-4">
-          TechDev is dedicated to making you a better web developer with practical tutorials, guides, and the latest tech news.
+          TechDev is dedicated to making you a better web developer with
+          practical tutorials, guides, and the latest tech news.
         </p>
         <Link href="/about">
           <Button
@@ -106,7 +108,10 @@ export function BlogSidebar() {
         <h3 className="text-lg font-bold text-gray-900 mb-4">Popular Posts</h3>
         <div className="space-y-4">
           {popularPosts.map((post, index) => (
-            <div key={index} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+            <div
+              key={index}
+              className="border-b border-gray-100 pb-4 last:border-0 last:pb-0"
+            >
               <Link
                 href={post.url}
                 className="text-gray-800 hover:text-cyan-600 font-medium text-sm block mb-1"
@@ -123,11 +128,10 @@ export function BlogSidebar() {
       <Card className="p-6 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
         <h3 className="text-lg font-bold mb-3">Subscribe to Our Newsletter</h3>
         <p className="text-gray-300 text-sm mb-4">
-          Get the latest web development tips, tutorials, and resources delivered to your inbox weekly.
+          Get the latest web development tips, tutorials, and resources
+          delivered to your inbox weekly.
         </p>
-        <Button
-          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white"
-        >
+        <Button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white">
           Subscribe Now
         </Button>
       </Card>

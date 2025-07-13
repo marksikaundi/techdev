@@ -87,9 +87,9 @@ export default function AboutPage() {
                 About TechDev
               </h1>
               <p className="text-xl text-gray-600 mb-8 max-w-3xl">
-                TechDev is dedicated to making you a better web developer through
-                practical tutorials, in-depth guides, and the latest insights on
-                web development technologies and best practices.
+                TechDev is dedicated to making you a better web developer
+                through practical tutorials, in-depth guides, and the latest
+                insights on web development technologies and best practices.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button className="bg-cyan-500 hover:bg-cyan-600 text-white">
@@ -122,10 +122,10 @@ export default function AboutPage() {
                 </p>
                 <p>
                   Our team of experienced developers and technical writers work
-                  tirelessly to ensure that our content is accurate,
-                  up-to-date, and easy to understand. We believe that learning
-                  should be accessible to everyone, regardless of their
-                  background or experience level.
+                  tirelessly to ensure that our content is accurate, up-to-date,
+                  and easy to understand. We believe that learning should be
+                  accessible to everyone, regardless of their background or
+                  experience level.
                 </p>
                 <p>
                   Today, TechDev is proud to serve a global community of
@@ -210,9 +210,7 @@ export default function AboutPage() {
                     <p className="text-lg font-medium text-gray-700 mb-2">
                       {stat.title}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      {stat.description}
-                    </p>
+                    <p className="text-sm text-gray-500">{stat.description}</p>
                   </Card>
                 ))}
               </div>
@@ -313,9 +311,7 @@ export default function AboutPage() {
                       </div>
                       <div className="flex items-center">
                         <Globe className="h-5 w-5 text-cyan-500 mr-3" />
-                        <span className="text-gray-700">
-                          San Francisco, CA
-                        </span>
+                        <span className="text-gray-700">San Francisco, CA</span>
                       </div>
                     </div>
                   </div>

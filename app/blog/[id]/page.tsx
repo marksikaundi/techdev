@@ -169,20 +169,14 @@ npm run dev</code></pre>
                 Blog
               </Link>
               <span className="mx-2">›</span>
-              <Link
-                href={post.categoryUrl}
-                className="hover:text-cyan-600"
-              >
+              <Link href={post.categoryUrl} className="hover:text-cyan-600">
                 {post.category}
               </Link>
             </div>
 
             {/* Post header */}
             <div className="mb-8">
-              <Link
-                href={post.categoryUrl}
-                className="inline-block mb-3"
-              >
+              <Link href={post.categoryUrl} className="inline-block mb-3">
                 <Badge className="bg-cyan-500 hover:bg-cyan-600 text-white font-medium px-3 py-1">
                   {post.category}
                 </Badge>
@@ -241,7 +235,10 @@ npm run dev</code></pre>
               <h3 className="text-lg font-bold text-gray-900 mb-3">Tags</h3>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <Link key={tag} href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}>
+                  <Link
+                    key={tag}
+                    href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                  >
                     <Badge className="bg-gray-100 text-gray-800 hover:bg-gray-200 font-medium px-3 py-1">
                       {tag}
                     </Badge>

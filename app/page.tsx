@@ -17,7 +17,8 @@ export default function Home() {
     {
       id: 1,
       title: "Getting Started with Next.js: A Complete Guide for Beginners",
-      excerpt: "Learn the fundamentals of Next.js and start building modern React applications.",
+      excerpt:
+        "Learn the fundamentals of Next.js and start building modern React applications.",
       image: "/next.svg",
       author: "Mark Sikaundi",
       date: "10 Jul 2025",
@@ -29,7 +30,8 @@ export default function Home() {
     {
       id: 2,
       title: "5 Essential VS Code Extensions for JavaScript Developers",
-      excerpt: "Boost your productivity with these must-have VS Code extensions for JavaScript development.",
+      excerpt:
+        "Boost your productivity with these must-have VS Code extensions for JavaScript development.",
       image: "/window.svg",
       author: "Jane Doe",
       date: "08 Jul 2025",
@@ -41,7 +43,8 @@ export default function Home() {
     {
       id: 3,
       title: "Understanding React Hooks: From useState to useEffect",
-      excerpt: "A deep dive into React Hooks and how they transform the way we build React components.",
+      excerpt:
+        "A deep dive into React Hooks and how they transform the way we build React components.",
       image: "/file.svg",
       author: "Mark Sikaundi",
       date: "07 Jul 2025",
@@ -53,7 +56,8 @@ export default function Home() {
     {
       id: 4,
       title: "The Complete Guide to Tailwind CSS in 2025",
-      excerpt: "Master Tailwind CSS and create beautiful, responsive websites with minimal effort.",
+      excerpt:
+        "Master Tailwind CSS and create beautiful, responsive websites with minimal effort.",
       image: "/globe.svg",
       author: "John Smith",
       date: "05 Jul 2025",
@@ -65,7 +69,8 @@ export default function Home() {
     {
       id: 5,
       title: "Building a Full-Stack Application with Next.js and Convex",
-      excerpt: "Learn how to create a modern web application using Next.js and Convex for your backend.",
+      excerpt:
+        "Learn how to create a modern web application using Next.js and Convex for your backend.",
       image: "/vercel.svg",
       author: "Mark Sikaundi",
       date: "03 Jul 2025",
@@ -88,7 +93,8 @@ export default function Home() {
     {
       id: 2,
       title: "The Ultimate Guide to React Development",
-      excerpt: "Learn about creating modern web applications with React in this super-detailed guide.",
+      excerpt:
+        "Learn about creating modern web applications with React in this super-detailed guide.",
       image: "/file.svg",
       tags: ["React", "Guides", "Development"],
     },
@@ -102,7 +108,8 @@ export default function Home() {
     {
       id: 4,
       title: "Web Development in 2025",
-      excerpt: "Learn the essentials of modern web development in this collection of quick tutorials.",
+      excerpt:
+        "Learn the essentials of modern web development in this collection of quick tutorials.",
       image: "/globe.svg",
       tags: ["Web Dev", "Tutorials", "Learning"],
     },
@@ -234,10 +241,7 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-6 md:w-2/3">
-                  <Link
-                    href={post.categoryUrl}
-                    className="inline-block mb-2"
-                  >
+                  <Link href={post.categoryUrl} className="inline-block mb-2">
                     <Badge className="bg-cyan-500 hover:bg-cyan-600 text-white font-medium px-3 py-1">
                       {post.category}
                     </Badge>
