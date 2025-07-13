@@ -77,7 +77,7 @@ export const seedInitialData = mutation({
           role: "Admin",
           status: "Active",
           lastLogin: now,
-          avatar: null,
+          avatar: undefined,
         },
         {
           name: "Jane Doe",
@@ -85,7 +85,7 @@ export const seedInitialData = mutation({
           role: "Editor",
           status: "Active",
           lastLogin: now,
-          avatar: null,
+          avatar: undefined,
         },
         {
           name: "John Smith",
@@ -93,7 +93,7 @@ export const seedInitialData = mutation({
           role: "Author",
           status: "Active",
           lastLogin: now,
-          avatar: null,
+          avatar: undefined,
         },
       ];
 

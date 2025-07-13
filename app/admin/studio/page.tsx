@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 import {
   DndContext,
   DragEndEvent,
@@ -65,7 +68,10 @@ import {
   Users,
   CheckCircle2,
   Clock,
+  Save,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 // Schema for task creation/editing
 const taskSchema = z.object({
@@ -94,76 +100,74 @@ type Board = z.infer<typeof boardSchema> & {
 };
 
 export default function StudioPage() {
-  // Initialize some default boards
-  const [boards, setBoards] = useState<Board[]>([
-    {
-      id: "board-1",
-      title: "To Do",
-      description: "Tasks that need to be done",
-      tasks: [
-        {
-          id: "task-1",
-          title: "Research content ideas",
-          description: "Find new content ideas for the blog",
-          priority: "medium",
-          status: "to-do",
-          dueDate: "2025-07-20",
-          assignee: "Mark Sikaundi",
-          createdAt: new Date(),
-        },
-        {
-          id: "task-2",
-          title: "Update homepage design",
-          description: "Implement new design for homepage",
-          priority: "high",
-          status: "to-do",
-          dueDate: "2025-07-18",
-          assignee: "Design Team",
-          createdAt: new Date(),
-        },
-      ],
-    },
-    {
-      id: "board-2",
-      title: "In Progress",
-      description: "Tasks currently being worked on",
-      tasks: [
-        {
-          id: "task-3",
-          title: "Write article about Next.js",
-          description: "Create detailed tutorial about Next.js features",
-          priority: "high",
-          status: "in-progress",
-          dueDate: "2025-07-25",
-          assignee: "Content Team",
-          createdAt: new Date(),
-        },
-      ],
-    },
-    {
-      id: "board-3",
-      title: "Done",
-      description: "Completed tasks",
-      tasks: [
-        {
-          id: "task-4",
-          title: "Fix navigation bug",
-          description: "Fix the bug in the navigation menu",
-          priority: "high",
-          status: "done",
-          dueDate: "2025-07-10",
-          assignee: "Development Team",
-          createdAt: new Date(),
-        },
-      ],
-    },
-  ]);
+  // Get boards from Convex
+  const planningBoardsData = useQuery(api.planning.getPlanningBoards);
 
+  // Convex mutations
+  const savePlanningStudioMutation = useMutation(
+    api.planning.savePlanningStudio
+  );
+  const createPlanningBoardMutation = useMutation(
+    api.planning.createPlanningBoard
+  );
+  const updatePlanningBoardMutation = useMutation(
+    api.planning.updatePlanningBoard
+  );
+  const deletePlanningBoardMutation = useMutation(
+    api.planning.deletePlanningBoard
+  );
+  const createPlanningTaskMutation = useMutation(
+    api.planning.createPlanningTask
+  );
+  const updatePlanningTaskMutation = useMutation(
+    api.planning.updatePlanningTask
+  );
+  const deletePlanningTaskMutation = useMutation(
+    api.planning.deletePlanningTask
+  );
+
+  // Local state for UI
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isAddingBoard, setIsAddingBoard] = useState(false);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [currentBoardId, setCurrentBoardId] = useState<string | null>(null);
+
+  // Initialize boards from Convex data
+  useEffect(() => {
+    if (planningBoardsData) {
+      try {
+        const formattedBoards = planningBoardsData.map((board) => ({
+          id: board._id.toString(),
+          title: board.title,
+          description: board.description || "",
+          tasks: Array.isArray(board.tasks)
+            ? board.tasks.map((task) => ({
+                id: task._id.toString(),
+                title: task.title,
+                description: task.description || "",
+                priority: task.priority as "low" | "medium" | "high",
+                status: task.status,
+                dueDate: task.dueDate || "",
+                assignee: task.assignee || "",
+                createdAt: new Date(task.createdAt),
+              }))
+            : [],
+        }));
+
+        // Only update if data has changed to prevent infinite render loop
+        if (JSON.stringify(formattedBoards) !== JSON.stringify(boards)) {
+          setBoards(formattedBoards);
+        }
+      } catch (error) {
+        console.error("Error formatting board data:", error);
+        toast("There was a problem loading your planning boards.");
+      }
+    }
+  }, [planningBoardsData, toast]);
 
   // Set up sensors for drag and drop
   const sensors = useSensors(
@@ -199,6 +203,46 @@ export default function StudioPage() {
       description: "",
     },
   });
+
+  // Save all boards and tasks to Convex
+  const saveAllData = async () => {
+    try {
+      setIsSaving(true);
+
+      // Format data for Convex
+      const boardsData = boards.map((board) => ({
+        id: board.id,
+        title: board.title,
+        description: board.description || "",
+        tasks: board.tasks.map((task) => ({
+          id: task.id,
+          title: task.title,
+          description: task.description || "",
+          priority: task.priority,
+          status: task.status,
+          dueDate: task.dueDate || "",
+          assignee: task.assignee || "",
+        })),
+      }));
+
+      if (boardsData.length === 0) {
+        toast("Create at least one board before saving.");
+        setIsSaving(false);
+        return;
+      }
+
+      const result = await savePlanningStudioMutation({ boards: boardsData });
+
+      if (result && result.boardIds) {
+        toast("Changes saved successfully.");
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      toast("Something went wrong. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Handle task drag operations
   const handleDragStart = (event: DragStartEvent) => {
@@ -238,7 +282,7 @@ export default function StudioPage() {
             ...task,
             status: updatedBoards[targetBoardIndex].title
               .toLowerCase()
-              .replace(/\\s+/g, "-"),
+              .replace(/\s+/g, "-"),
           });
           setBoards(updatedBoards);
         }
@@ -256,83 +300,135 @@ export default function StudioPage() {
   };
 
   // Add a new board
-  const onAddBoard = (data: z.infer<typeof boardSchema>) => {
-    const newBoard: Board = {
-      id: `board-${Date.now()}`,
-      title: data.title,
-      description: data.description || "",
-      tasks: [],
-    };
-    setBoards([...boards, newBoard]);
-    setIsAddingBoard(false);
-    boardForm.reset();
+  const onAddBoard = async (data: z.infer<typeof boardSchema>) => {
+    try {
+      const newBoard: Board = {
+        id: `temp-${Date.now()}`, // Temporary ID until saved
+        title: data.title,
+        description: data.description || "",
+        tasks: [],
+      };
+
+      // Update local state
+      setBoards([...boards, newBoard]);
+
+      // Close dialog and reset form
+      setIsAddingBoard(false);
+      boardForm.reset();
+
+      // Show toast
+      toast("Save changes to persist your new board to the database.");
+    } catch (error) {
+      console.error("Error adding board:", error);
+      toast("Something went wrong. Please try again.");
+    }
   };
 
   // Add a new task
-  const onAddTask = (data: z.infer<typeof taskSchema>) => {
+  const onAddTask = async (data: z.infer<typeof taskSchema>) => {
     if (!currentBoardId) return;
 
-    const newTask: Task = {
-      id: `task-${Date.now()}`,
-      title: data.title,
-      description: data.description || "",
-      priority: data.priority,
-      status: "to-do",
-      dueDate: data.dueDate || "",
-      assignee: data.assignee || "",
-      createdAt: new Date(),
-    };
+    try {
+      const newTask: Task = {
+        id: `temp-task-${Date.now()}`, // Temporary ID until saved
+        title: data.title,
+        description: data.description || "",
+        priority: data.priority,
+        status: "to-do",
+        dueDate: data.dueDate || "",
+        assignee: data.assignee || "",
+        createdAt: new Date(),
+      };
 
-    const updatedBoards = boards.map((board) =>
-      board.id === currentBoardId
-        ? { ...board, tasks: [...board.tasks, newTask] }
-        : board
-    );
+      const updatedBoards = boards.map((board) =>
+        board.id === currentBoardId
+          ? { ...board, tasks: [...board.tasks, newTask] }
+          : board
+      );
 
-    setBoards(updatedBoards);
-    setIsAddingTask(false);
-    setCurrentBoardId(null);
-    taskForm.reset();
+      // Update local state
+      setBoards(updatedBoards);
+
+      // Close dialog and reset form
+      setIsAddingTask(false);
+      setCurrentBoardId(null);
+      taskForm.reset();
+
+      // Show toast
+      toast("Save changes to persist your new task to the database.");
+    } catch (error) {
+      console.error("Error adding task:", error);
+      toast("Something went wrong. Please try again.");
+    }
   };
 
   // Edit an existing task
-  const onEditTask = (data: z.infer<typeof taskSchema>) => {
+  const onEditTask = async (data: z.infer<typeof taskSchema>) => {
     if (!editingTask) return;
 
-    const updatedBoards = boards.map((board) => ({
-      ...board,
-      tasks: board.tasks.map((task) =>
-        task.id === editingTask.id
-          ? {
-              ...task,
-              title: data.title,
-              description: data.description || "",
-              priority: data.priority,
-              dueDate: data.dueDate || "",
-              assignee: data.assignee || "",
-            }
-          : task
-      ),
-    }));
+    try {
+      const updatedBoards = boards.map((board) => ({
+        ...board,
+        tasks: board.tasks.map((task) =>
+          task.id === editingTask.id
+            ? {
+                ...task,
+                title: data.title,
+                description: data.description || "",
+                priority: data.priority,
+                dueDate: data.dueDate || "",
+                assignee: data.assignee || "",
+              }
+            : task
+        ),
+      }));
 
-    setBoards(updatedBoards);
-    setEditingTask(null);
-    taskForm.reset();
+      // Update local state
+      setBoards(updatedBoards);
+
+      // Close dialog and reset form
+      setEditingTask(null);
+      taskForm.reset();
+
+      // Show toast
+      toast("Save changes to persist your task updates to the database.");
+    } catch (error) {
+      console.error("Error updating task:", error);
+      toast("Something went wrong. Please try again.");
+    }
   };
 
   // Delete a task
-  const onDeleteTask = (taskId: string) => {
-    const updatedBoards = boards.map((board) => ({
-      ...board,
-      tasks: board.tasks.filter((task) => task.id !== taskId),
-    }));
+  const onDeleteTask = async (taskId: string) => {
+    try {
+      const updatedBoards = boards.map((board) => ({
+        ...board,
+        tasks: board.tasks.filter((task) => task.id !== taskId),
+      }));
 
-    setBoards(updatedBoards);
+      // Update local state
+      setBoards(updatedBoards);
+
+      // Show toast
+      toast("Save changes to persist this deletion to the database.");
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      toast("Something went wrong. Please try again.");
+    }
   };
 
   // Delete a board
-  const onDeleteBoard = (boardId: string) => {
-    setBoards(boards.filter((board) => board.id !== boardId));
+  const onDeleteBoard = async (boardId: string) => {
+    try {
+      // Update local state
+      setBoards(boards.filter((board) => board.id !== boardId));
+
+      // Show toast
+      toast("Save changes to persist this deletion to the database.");
+    } catch (error) {
+      console.error("Error deleting board:", error);
+      toast("Something went wrong. Please try again.");
+    }
   };
 
   // Reset and prepare forms for editing
@@ -361,6 +457,18 @@ export default function StudioPage() {
     }
   };
 
+  // If data is still loading from Convex
+  if (!planningBoardsData && boards.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[80vh]">
+        <div className="flex flex-col items-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading planning studio...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -370,9 +478,24 @@ export default function StudioPage() {
             Organize your tasks and projects
           </p>
         </div>
-        <Button onClick={() => setIsAddingBoard(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Add Board
-        </Button>
+        <div className="flex space-x-2">
+          <Button variant="outline" onClick={saveAllData} disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Changes
+              </>
+            )}
+          </Button>
+          <Button onClick={() => setIsAddingBoard(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Add Board
+          </Button>
+        </div>
       </div>
 
       {/* Kanban Board Container */}

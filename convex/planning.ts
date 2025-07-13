@@ -11,7 +11,7 @@ export const getPlanningBoards = query({
     // Get all boards ordered by their order property
     const boards = await ctx.db
       .query("planningBoards")
-      .order("asc", "order")
+      .order("asc")
       .collect();
 
     // For each board, get its tasks
@@ -20,7 +20,7 @@ export const getPlanningBoards = query({
         const tasks = await ctx.db
           .query("planningTasks")
           .withIndex("by_boardId", (q) => q.eq("boardId", board._id))
-          .order("asc", "order")
+          .order("asc")
           .collect();
 
         return {
@@ -46,7 +46,7 @@ export const getPlanningBoard = query({
     const tasks = await ctx.db
       .query("planningTasks")
       .withIndex("by_boardId", (q) => q.eq("boardId", args.id))
-      .order("asc", "order")
+      .order("asc")
       .collect();
 
     return {
@@ -111,20 +111,31 @@ export const updatePlanningBoard = mutation({
 export const deletePlanningBoard = mutation({
   args: { id: v.id("planningBoards") },
   handler: async (ctx, args) => {
-    // Delete all tasks in the board
-    const tasks = await ctx.db
-      .query("planningTasks")
-      .withIndex("by_boardId", (q) => q.eq("boardId", args.id))
-      .collect();
-
-    for (const task of tasks) {
-      await ctx.db.delete(task._id);
+    // Check if board exists
+    const board = await ctx.db.get(args.id);
+    if (!board) {
+      throw new Error("Board not found");
     }
 
-    // Delete the board
-    await ctx.db.delete(args.id);
+    try {
+      // Delete all tasks in the board
+      const tasks = await ctx.db
+        .query("planningTasks")
+        .withIndex("by_boardId", (q) => q.eq("boardId", args.id))
+        .collect();
 
-    return args.id;
+      for (const task of tasks) {
+        await ctx.db.delete(task._id);
+      }
+
+      // Delete the board
+      await ctx.db.delete(args.id);
+
+      return args.id;
+    } catch (error) {
+      console.error("Error deleting board:", error);
+      throw new Error("Failed to delete board and its tasks");
+    }
   },
 });
 
@@ -141,18 +152,29 @@ export const createPlanningTask = mutation({
     order: v.number(),
   },
   handler: async (ctx, args) => {
+    // Check if board exists
+    const board = await ctx.db.get(args.boardId);
+    if (!board) {
+      throw new Error("Board not found");
+    }
+
     const now = new Date().toISOString();
 
-    const taskId = await ctx.db.insert("planningTasks", {
-      ...args,
-      description: args.description || "",
-      dueDate: args.dueDate || "",
-      assignee: args.assignee || "",
-      createdAt: now,
-      updatedAt: now,
-    });
+    try {
+      const taskId = await ctx.db.insert("planningTasks", {
+        ...args,
+        description: args.description || "",
+        dueDate: args.dueDate || "",
+        assignee: args.assignee || "",
+        createdAt: now,
+        updatedAt: now,
+      });
 
-    return taskId;
+      return taskId;
+    } catch (error) {
+      console.error("Error creating task:", error);
+      throw new Error("Failed to create task");
+    }
   },
 });
 
@@ -192,8 +214,19 @@ export const updatePlanningTask = mutation({
 export const deletePlanningTask = mutation({
   args: { id: v.id("planningTasks") },
   handler: async (ctx, args) => {
-    await ctx.db.delete(args.id);
-    return args.id;
+    // Check if task exists
+    const task = await ctx.db.get(args.id);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+    
+    try {
+      await ctx.db.delete(args.id);
+      return args.id;
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      throw new Error("Failed to delete task");
+    }
   },
 });
 
@@ -221,18 +254,29 @@ export const savePlanningStudio = mutation({
   },
   handler: async (ctx, args) => {
     const now = new Date().toISOString();
-    const result = { boards: [] };
+    const result: { boardIds: Id<"planningBoards">[] } = { boardIds: [] };
 
     // Delete all existing planning data
     const existingBoards = await ctx.db.query("planningBoards").collect();
     for (const board of existingBoards) {
+      // Delete all tasks for this board first
+      const tasks = await ctx.db
+        .query("planningTasks")
+        .withIndex("by_boardId", (q) => q.eq("boardId", board._id))
+        .collect();
+
+      for (const task of tasks) {
+        await ctx.db.delete(task._id);
+      }
+
+      // Then delete the board
       await ctx.db.delete(board._id);
     }
 
     // Create new boards and tasks
     for (let i = 0; i < args.boards.length; i++) {
       const board = args.boards[i];
-      
+
       // Create the board
       const boardId = await ctx.db.insert("planningBoards", {
         title: board.title,
@@ -241,12 +285,11 @@ export const savePlanningStudio = mutation({
         createdAt: now,
         updatedAt: now,
       });
-      
+
       // Create the tasks for this board
-      const taskIds = [];
       for (let j = 0; j < board.tasks.length; j++) {
         const task = board.tasks[j];
-        const taskId = await ctx.db.insert("planningTasks", {
+        await ctx.db.insert("planningTasks", {
           boardId,
           title: task.title,
           description: task.description || "",
@@ -258,15 +301,11 @@ export const savePlanningStudio = mutation({
           createdAt: now,
           updatedAt: now,
         });
-        taskIds.push(taskId);
       }
-      
-      result.boards.push({
-        id: boardId,
-        taskIds,
-      });
+
+      result.boardIds.push(boardId);
     }
-    
+
     return result;
   },
 });
