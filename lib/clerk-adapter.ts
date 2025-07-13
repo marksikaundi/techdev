@@ -28,14 +28,26 @@ export interface ExtendedUserResource extends UserResource {
 export async function adaptUserToResource(user: User): Promise<UserResource> {
   if (!user) return null as unknown as UserResource;
   
+  // Serialize the email addresses to plain objects
+  const serializedEmailAddresses = user.emailAddresses?.map(email => ({
+    id: email.id,
+    emailAddress: email.emailAddress,
+    verification: email.verification ? {
+      status: email.verification.status,
+      strategy: email.verification.strategy,
+    } : null,
+    linkedTo: Array.isArray(email.linkedTo) ? 
+      email.linkedTo.map(link => ({ id: link.id, type: link.type })) : []
+  })) || [];
+  
   // Create a compatible UserResource object with all the properties needed by our components
   const userResource = {
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
     imageUrl: user.imageUrl,
-    emailAddresses: user.emailAddresses || [],
-    publicMetadata: user.publicMetadata || {},
+    emailAddresses: serializedEmailAddresses,
+    publicMetadata: user.publicMetadata ? { ...user.publicMetadata } : {},
     primaryEmailAddressId: user.primaryEmailAddressId,
     username: user.username,
     primaryPhoneNumberId: user.primaryPhoneNumberId,
@@ -45,10 +57,20 @@ export async function adaptUserToResource(user: User): Promise<UserResource> {
     delete: async () => ({}),
     reload: async () => userResource,
     
-    // Add stub arrays for collections
+    // Serialize complex arrays to simple objects
     organizationMemberships: [],
-    phoneNumbers: [],
-    externalAccounts: [],
+    phoneNumbers: user.phoneNumbers?.map(phone => ({
+      id: phone.id,
+      phoneNumber: phone.phoneNumber,
+      verification: phone.verification ? {
+        status: phone.verification.status,
+        strategy: phone.verification.strategy,
+      } : null,
+    })) || [],
+    externalAccounts: user.externalAccounts?.map(account => ({
+      id: account.id,
+      provider: account.provider,
+    })) || [],
     samlAccounts: [],
     verifications: {},
     passwordEnabled: true,
@@ -69,7 +91,15 @@ export async function adaptUserToResource(user: User): Promise<UserResource> {
   };
   
   // Use type assertion to convert to UserResource
-  return userResource as unknown as UserResource;
+  const safeUserResource = {
+    ...userResource,
+    // Ensure timestamps are numbers, not Date objects
+    createdAt: typeof user.createdAt === 'number' ? user.createdAt : Date.now(),
+    updatedAt: typeof user.updatedAt === 'number' ? user.updatedAt : Date.now(),
+    lastSignInAt: typeof user.lastSignInAt === 'number' ? user.lastSignInAt : Date.now(),
+  };
+  
+  return safeUserResource as unknown as UserResource;
 }
 
 // Enhanced adapter that adds additional functionality to the user resource
@@ -77,42 +107,46 @@ export async function adaptUserToExtendedResource(user: User): Promise<ExtendedU
   // First get the basic UserResource
   const baseResource = await adaptUserToResource(user);
   
-  // Then extend it with additional methods and properties
+  // Pre-calculate values to avoid methods in the final object
+  const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Anonymous User';
+  const initials = !user.firstName && !user.lastName ? 'U' : 
+    `${(user.firstName?.[0] || '')}${(user.lastName?.[0] || '')}`.toUpperCase();
+  const displayName = user.username || fullName;
+  
+  // Find primary email
+  const primaryEmail = user.emailAddresses?.find(email => 
+    email.id === user.primaryEmailAddressId
+  )?.emailAddress || '';
+  
+  // Get bio and website
+  const bio = (user.publicMetadata?.bio as string) || '';
+  const website = (user.publicMetadata?.website as string) || '';
+  
+  // Get avatar URL
+  const avatarUrl = user.imageUrl || 
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=random`;
+  
+  // Then create a plain object with pre-computed values
   const extendedResource = {
     ...baseResource,
     
-    // Add helper methods
-    getFullName: function() {
-      return `${this.firstName || ''} ${this.lastName || ''}`.trim() || 'Anonymous User';
-    },
+    // Replace methods with pre-computed values
+    _fullName: fullName,
+    _initials: initials,
+    _displayName: displayName,
+    _primaryEmail: primaryEmail,
+    _bio: bio,
+    _website: website,
+    _avatarUrl: avatarUrl,
     
-    getInitials: function() {
-      if (!this.firstName && !this.lastName) return 'U';
-      return `${(this.firstName?.[0] || '')}${(this.lastName?.[0] || '')}`.toUpperCase();
-    },
-    
-    getDisplayName: function() {
-      return this.username || this.getFullName();
-    },
-    
-    getPrimaryEmail: function() {
-      const primaryEmail = this.emailAddresses.find(email => 
-        email.id === this.primaryEmailAddressId
-      );
-      return primaryEmail?.emailAddress || '';
-    },
-    
-    getBio: function() {
-      return (this.publicMetadata?.bio as string) || '';
-    },
-    
-    getWebsite: function() {
-      return (this.publicMetadata?.website as string) || '';
-    },
-    
-    getAvatarUrl: function() {
-      return this.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(this.getFullName())}&background=random`;
-    },
+    // Add helper methods that use the pre-computed values
+    getFullName: function() { return this._fullName; },
+    getInitials: function() { return this._initials; },
+    getDisplayName: function() { return this._displayName; },
+    getPrimaryEmail: function() { return this._primaryEmail; },
+    getBio: function() { return this._bio; },
+    getWebsite: function() { return this._website; },
+    getAvatarUrl: function() { return this._avatarUrl; },
     
     // Add extended properties
     isAdmin: (user.publicMetadata?.role as string) === 'admin',
