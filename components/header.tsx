@@ -11,9 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { UserButton, useAuth, SignInButton } from "@clerk/nextjs";
 
 export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { isSignedIn } = useAuth();
 
   const navigationItems = [
     {
@@ -100,40 +102,33 @@ export function Header() {
 
           {/* Right side items */}
           <div className="flex items-center space-x-2">
-            {/* Members Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            {/* Authentication */}
+            {isSignedIn ? (
+              <div className="flex items-center space-x-2">
                 <Button
                   variant="ghost"
-                  className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium items-center gap-1 h-8"
+                  className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium h-8 items-center"
+                  asChild
                 >
-                  Members
-                  <ChevronDown className="h-3 w-3" />
+                  <Link href="/admin/dashboard">Dashboard</Link>
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-gray-800 border-gray-700">
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Link href="/members">Members</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Link href="/membership">Membership</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Link href="/signup">Signup</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Link href="/signin">Signin</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* More menu */}
-            <Button
-              variant="ghost"
-              className="hidden lg:flex text-gray-300 hover:text-white hover:bg-gray-800 px-3 py-2 text-sm font-medium h-8 items-center"
-            >
-              •••
-            </Button>
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "w-8 h-8",
+                    },
+                  }}
+                />
+              </div>
+            ) : (
+              <Button
+                className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-1 text-sm font-medium rounded-md h-8"
+                asChild
+              >
+                <Link href="/auth/sign-in">Sign In</Link>
+              </Button>
+            )}
 
             {/* Search */}
             <Button
@@ -176,18 +171,29 @@ export function Header() {
                     </Link>
                   ))}
                   <div className="border-t border-gray-800 pt-4">
-                    <Link
-                      href="/members"
-                      className="text-gray-300 hover:text-white px-3 py-2 text-base font-medium block"
-                    >
-                      Members
-                    </Link>
-                    <Link
-                      href="/membership"
-                      className="text-gray-300 hover:text-white px-3 py-2 text-base font-medium block"
-                    >
-                      Membership
-                    </Link>
+                    {isSignedIn ? (
+                      <>
+                        <Link
+                          href="/admin/dashboard"
+                          className="text-gray-300 hover:text-white px-3 py-2 text-base font-medium block"
+                        >
+                          Dashboard
+                        </Link>
+                        <div className="flex items-center px-3 py-2 space-x-2">
+                          <span className="text-gray-300 text-base font-medium">
+                            Account
+                          </span>
+                          <UserButton afterSignOutUrl="/" />
+                        </div>
+                      </>
+                    ) : (
+                      <Button
+                        className="ml-3 bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-1 text-sm font-medium rounded-md"
+                        asChild
+                      >
+                        <Link href="/auth/sign-in">Sign In</Link>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </SheetContent>
