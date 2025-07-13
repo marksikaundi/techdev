@@ -5,7 +5,16 @@ import { User } from "@clerk/nextjs/server";
 
 // Extended user resource with additional functionality and methods
 export interface ExtendedUserResource extends UserResource {
-  // Add additional helper methods and properties
+  // Pre-computed values (stored as properties to help with serialization)
+  _fullName: string;
+  _initials: string;
+  _displayName: string;
+  _primaryEmail: string;
+  _bio: string;
+  _website: string;
+  _avatarUrl: string;
+  
+  // Helper methods that return pre-computed values
   getFullName(): string;
   getInitials(): string;
   getDisplayName(): string;
