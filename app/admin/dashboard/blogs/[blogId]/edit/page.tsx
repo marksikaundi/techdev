@@ -1,19 +1,21 @@
-import { AdminSidebar } from "@/components/admin/sidebar";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { BlogForm } from "@/components/admin/blog-form";
-import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import ConvexClientProvider from "@/components/providers/convex-provider";
 
 // Define the function to fetch blog data
-async function getBlogById(id: string) {
+async function getBlogById(id: Id<"blogs">) {
   try {
     // Since this is a server component, we need to use the Convex HTTP API
-    // For now, we'll return a stub, but in a real app you'd use fetch to the Convex API
+    // For now, we'll return a stub for demo purposes
     return {
-      _id: id as Id<"blogs">,
-      title: "Loading...",
-      content: "Loading...",
+      _id: id,
+      title: "Sample Blog",
+      content: "Sample content for the blog",
       userId: "",
       userName: "",
       imageUrl: "",
@@ -40,98 +42,58 @@ export default async function EditBlogPage({
     redirect("/auth/sign-in");
   }
 
-  const blogId = params.blogId;
-  const blogData = await getBlogById(blogId);
-
-  if (!blogData) {
-    redirect("/admin/dashboard/blogs");
-  }
-
-  return (
-    <div className="flex h-screen bg-muted/20">
-      <div className="w-64 h-full">
-        <AdminSidebar />
-      </div>
-      <div className="flex-1 p-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Edit Blog</h1>
-          <p className="text-muted-foreground">
-            Make changes to your blog post
-          </p>
-        </div>
-
-        <BlogClientWrapper
-          userId={userId}
-          userName={`${user.firstName || ""} ${user.lastName || ""}`.trim()}
-          blogId={blogId}
-        />
-      </div>
-    </div>
-  );
-}
-
-// Client component wrapper to handle Convex queries
-("use client");
-
-import { useQuery } from "convex/react";
-import { Skeleton } from "@/components/ui/skeleton";
-import ConvexClientProvider from "@/components/providers/convex-provider";
-
-function BlogClientWrapper({
-  userId,
-  userName,
-  blogId,
-}: {
-  userId: string;
-  userName: string;
-  blogId: string;
-}) {
-  return (
-    <ConvexClientProvider>
-      <BlogContent userId={userId} userName={userName} blogId={blogId} />
-    </ConvexClientProvider>
-  );
-}
-
-function BlogContent({
-  userId,
-  userName,
-  blogId,
-}: {
-  userId: string;
-  userName: string;
-  blogId: string;
-}) {
-  const blog = useQuery(api.queries.getBlogById, {
-    id: blogId as Id<"blogs">,
-  });
+  const blogId = params.blogId as Id<"blogs">;
+  const blog = await getBlogById(blogId);
 
   if (!blog) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-40 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-16 w-full" />
-        <div className="flex justify-end gap-4">
-          <Skeleton className="h-10 w-24" />
-          <Skeleton className="h-10 w-32" />
+      <div className="p-8">
+        <div className="flex items-center mb-8">
+          <Button asChild variant="ghost" size="sm" className="mr-4">
+            <Link href="/admin/dashboard/blogs">
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Back to Blogs
+            </Link>
+          </Button>
+        </div>
+
+        <div className="bg-card p-8 rounded-lg border shadow-sm">
+          <h1 className="text-2xl font-bold mb-4">Blog Not Found</h1>
+          <p className="text-muted-foreground mb-6">
+            The blog post you are looking for does not exist or has been
+            deleted.
+          </p>
+          <Button asChild>
+            <Link href="/admin/dashboard/blogs">Return to Blogs</Link>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <BlogForm
-      userId={blog.userId || userId}
-      userName={blog.userName || userName}
-      initialData={{
-        id: blog._id,
-        title: blog.title,
-        content: blog.content,
-        imageUrl: blog.imageUrl,
-        published: blog.published,
-      }}
-    />
+    <div className="p-8">
+      <div className="flex items-center mb-8">
+        <Button asChild variant="ghost" size="sm" className="mr-4">
+          <Link href={`/admin/dashboard/blogs/${blogId}`}>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Blog
+          </Link>
+        </Button>
+        <h1 className="text-2xl font-bold">Edit Blog Post</h1>
+      </div>
+
+      <BlogForm
+        userId={userId}
+        userName={`${user.firstName || ""} ${user.lastName || ""}`.trim()}
+        initialData={{
+          id: blog._id,
+          title: blog.title,
+          content: blog.content,
+          imageUrl: blog.imageUrl,
+          published: blog.published,
+        }}
+      />
+    </div>
   );
 }

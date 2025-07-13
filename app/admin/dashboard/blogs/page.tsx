@@ -1,4 +1,3 @@
-import { AdminSidebar } from "@/components/admin/sidebar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,30 +15,25 @@ export default async function BlogsManagementPage() {
   }
 
   return (
-    <div className="flex h-screen bg-muted/20">
-      <div className="w-64 h-full">
-        <AdminSidebar />
-      </div>
-      <div className="flex-1 p-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Manage Blogs</h1>
-            <p className="text-muted-foreground">
-              Create, edit and manage your blog posts
-            </p>
-          </div>
-          <Button asChild>
-            <Link href="/admin/dashboard/blogs/new">
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Create New Blog
-            </Link>
-          </Button>
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Manage Blogs</h1>
+          <p className="text-muted-foreground">
+            Create, edit and manage your blog posts
+          </p>
         </div>
-
-        <ConvexClientProvider>
-          <BlogListTable userId={userId} />
-        </ConvexClientProvider>
+        <Button asChild>
+          <Link href="/admin/dashboard/blogs/new">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Create New Blog
+          </Link>
+        </Button>
       </div>
+
+      <ConvexClientProvider>
+        <BlogListTable userId={userId} />
+      </ConvexClientProvider>
     </div>
   );
 }

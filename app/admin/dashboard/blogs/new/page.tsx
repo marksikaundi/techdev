@@ -1,6 +1,8 @@
-import { AdminSidebar } from "@/components/admin/sidebar";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { BlogForm } from "@/components/admin/blog-form";
 import ConvexClientProvider from "@/components/providers/convex-provider";
 
@@ -14,25 +16,23 @@ export default async function NewBlogPage() {
   }
 
   return (
-    <div className="flex h-screen bg-muted/20">
-      <div className="w-64 h-full">
-        <AdminSidebar />
+    <div className="p-8">
+      <div className="flex items-center mb-8">
+        <Button asChild variant="ghost" size="sm" className="mr-4">
+          <Link href="/admin/dashboard/blogs">
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Blogs
+          </Link>
+        </Button>
+        <h1 className="text-2xl font-bold">Create New Blog</h1>
       </div>
-      <div className="flex-1 p-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Create New Blog</h1>
-          <p className="text-muted-foreground">
-            Create and publish your new blog post
-          </p>
-        </div>
 
-        <ConvexClientProvider>
-          <BlogForm
-            userId={userId}
-            userName={`${user.firstName || ""} ${user.lastName || ""}`.trim()}
-          />
-        </ConvexClientProvider>
-      </div>
+      <ConvexClientProvider>
+        <BlogForm
+          userId={userId}
+          userName={`${user.firstName || ""} ${user.lastName || ""}`.trim()}
+        />
+      </ConvexClientProvider>
     </div>
   );
 }
