@@ -22,7 +22,7 @@ export default async function SettingsPage() {
   }
 
   // Convert the clerk user to our enhanced ExtendedUserResource type
-  const user = adaptUserToExtendedResource(clerkUser);
+  const user = await adaptUserToExtendedResource(clerkUser);
 
   return (
     <div className="p-8">

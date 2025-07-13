@@ -25,7 +25,7 @@ export interface ExtendedUserResource extends UserResource {
 
 // This adapter function converts the CurrentUser type from @clerk/nextjs/server
 // to a compatible UserResource type from @clerk/types
-export function adaptUserToResource(user: User): UserResource {
+export async function adaptUserToResource(user: User): Promise<UserResource> {
   if (!user) return null as unknown as UserResource;
   
   // Create a compatible UserResource object with all the properties needed by our components
@@ -66,15 +66,16 @@ export function adaptUserToResource(user: User): UserResource {
     enterpriseAccounts: [],
     passkeys: [],
     web3Wallets: []
-  } as unknown as UserResource;
+  };
   
-  return userResource;
+  // Use type assertion to convert to UserResource
+  return userResource as unknown as UserResource;
 }
 
 // Enhanced adapter that adds additional functionality to the user resource
-export function adaptUserToExtendedResource(user: User): ExtendedUserResource {
+export async function adaptUserToExtendedResource(user: User): Promise<ExtendedUserResource> {
   // First get the basic UserResource
-  const baseResource = adaptUserToResource(user);
+  const baseResource = await adaptUserToResource(user);
   
   // Then extend it with additional methods and properties
   const extendedResource = {
@@ -121,7 +122,8 @@ export function adaptUserToExtendedResource(user: User): ExtendedUserResource {
       notifications: (user.publicMetadata?.notificationsEnabled as boolean) || true,
       newsletterFrequency: (user.publicMetadata?.newsletterFrequency as string) || 'weekly'
     }
-  } as ExtendedUserResource;
+  };
   
-  return extendedResource;
+  // Use type assertion to convert to ExtendedUserResource
+  return extendedResource as unknown as ExtendedUserResource;
 }
