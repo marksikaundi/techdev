@@ -3,25 +3,16 @@
 import { UserResource } from "@clerk/types";
 import { User } from "@clerk/nextjs/server";
 
-// Extended user resource with additional functionality and methods
+// Extended user resource with pre-computed values
 export interface ExtendedUserResource extends UserResource {
-  // Pre-computed values (stored as properties to help with serialization)
-  _fullName: string;
-  _initials: string;
-  _displayName: string;
-  _primaryEmail: string;
-  _bio: string;
-  _website: string;
-  _avatarUrl: string;
-  
-  // Helper methods that return pre-computed values
-  getFullName(): string;
-  getInitials(): string;
-  getDisplayName(): string;
-  getPrimaryEmail(): string;
-  getBio(): string;
-  getWebsite(): string;
-  getAvatarUrl(): string;
+  // Pre-computed values (stored as properties for direct access)
+  fullName: string;
+  initials: string;
+  displayName: string;
+  primaryEmail: string;
+  bio: string;
+  website: string;
+  avatarUrl: string;
   
   // Add fields for UI-specific functionality
   isAdmin: boolean;
@@ -61,10 +52,11 @@ export async function adaptUserToResource(user: User): Promise<UserResource> {
     username: user.username,
     primaryPhoneNumberId: user.primaryPhoneNumberId,
     
-    // Add stub methods and properties to satisfy the UserResource interface
-    update: async () => ({ ...userResource }),
-    delete: async () => ({}),
-    reload: async () => userResource,
+    // These are required properties but will be replaced with serializable placeholders
+    // We'll manually mark them with null as they should never be called
+    update: null,
+    delete: null,
+    reload: null,
     
     // Serialize complex arrays to simple objects
     organizationMemberships: [],
@@ -139,23 +131,14 @@ export async function adaptUserToExtendedResource(user: User): Promise<ExtendedU
   const extendedResource = {
     ...baseResource,
     
-    // Replace methods with pre-computed values
-    _fullName: fullName,
-    _initials: initials,
-    _displayName: displayName,
-    _primaryEmail: primaryEmail,
-    _bio: bio,
-    _website: website,
-    _avatarUrl: avatarUrl,
-    
-    // Add helper methods that use the pre-computed values
-    getFullName: function() { return this._fullName; },
-    getInitials: function() { return this._initials; },
-    getDisplayName: function() { return this._displayName; },
-    getPrimaryEmail: function() { return this._primaryEmail; },
-    getBio: function() { return this._bio; },
-    getWebsite: function() { return this._website; },
-    getAvatarUrl: function() { return this._avatarUrl; },
+    // Add pre-computed values as direct properties
+    fullName,
+    initials,
+    displayName,
+    primaryEmail,
+    bio,
+    website,
+    avatarUrl,
     
     // Add extended properties
     isAdmin: (user.publicMetadata?.role as string) === 'admin',

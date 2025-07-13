@@ -54,9 +54,9 @@ export function AccountSettings({ user }: { user: ExtendedUserResource }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // Use the preferences from extended user resource
+  // Use the properties directly from extended user resource
   const defaultValues: Partial<AccountFormValues> = {
-    email: user.getPrimaryEmail(),
+    email: user.primaryEmail,
     notifications: user.preferences.notifications,
     newsletterFrequency: user.preferences.newsletterFrequency as "daily" | "weekly" | "monthly" | "never",
   };

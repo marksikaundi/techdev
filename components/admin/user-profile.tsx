@@ -41,11 +41,11 @@ export function UserProfile({ user }: { user: ExtendedUserResource }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Use the helper methods from ExtendedUserResource
+  // Use the properties directly from ExtendedUserResource
   const defaultValues: Partial<ProfileFormValues> = {
-    fullName: user.getFullName(),
-    bio: user.getBio(),
-    website: user.getWebsite(),
+    fullName: user.fullName,
+    bio: user.bio,
+    website: user.website,
   };
 
   const form = useForm<ProfileFormValues>({
@@ -76,15 +76,15 @@ export function UserProfile({ user }: { user: ExtendedUserResource }) {
     <div className="space-y-8">
       <div className="flex items-center gap-x-6">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={user.getAvatarUrl()} alt={form.getValues().fullName} />
+          <AvatarImage src={user.avatarUrl} alt={form.getValues().fullName} />
           <AvatarFallback>
-            {user.getInitials()}
+            {user.initials}
           </AvatarFallback>
         </Avatar>
         <div>
           <h2 className="text-xl font-semibold">{form.getValues().fullName}</h2>
           <p className="text-sm text-muted-foreground">
-            {user.getPrimaryEmail()}
+            {user.primaryEmail}
           </p>
         </div>
       </div>
