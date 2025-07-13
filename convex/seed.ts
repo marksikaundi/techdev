@@ -109,7 +109,8 @@ export const seedInitialData = mutation({
         {
           title: "Getting Started with Next.js: A Complete Guide for Beginners",
           slug: "getting-started-with-nextjs",
-          excerpt: "Learn the fundamentals of Next.js and start building modern React applications.",
+          excerpt:
+            "Learn the fundamentals of Next.js and start building modern React applications.",
           content: `Next.js has become one of the most popular React frameworks for building modern web applications. With its powerful features like server-side rendering, static site generation, and built-in routing, Next.js provides an excellent developer experience while ensuring optimal performance for your users.
 
 ## What is Next.js?
@@ -148,7 +149,8 @@ This will set up a new Next.js project with all the necessary dependencies and a
         {
           title: "5 Essential VS Code Extensions for JavaScript Developers",
           slug: "vs-code-extensions-for-javascript-developers",
-          excerpt: "Boost your productivity with these must-have VS Code extensions for JavaScript development.",
+          excerpt:
+            "Boost your productivity with these must-have VS Code extensions for JavaScript development.",
           content: `Visual Studio Code has become the editor of choice for many JavaScript developers thanks to its excellent performance, flexibility, and extensive ecosystem of extensions. In this article, we'll explore five essential VS Code extensions that can significantly improve your JavaScript development workflow.
 
 ## 1. ESLint
@@ -182,7 +184,8 @@ While not specifically for JavaScript, GitLens supercharges Git capabilities in 
         {
           title: "Understanding React Hooks: From useState to useEffect",
           slug: "understanding-react-hooks",
-          excerpt: "A comprehensive guide to React's most commonly used Hooks and how to use them effectively.",
+          excerpt:
+            "A comprehensive guide to React's most commonly used Hooks and how to use them effectively.",
           content: `React Hooks revolutionized how we write React components by allowing us to use state and other React features without writing classes. In this guide, we'll explore the most commonly used Hooks and how they can improve your React applications.
 
 ## useState
@@ -256,7 +259,8 @@ These Hooks help optimize performance by memoizing functions and values to preve
         {
           title: "The Complete Guide to Tailwind CSS in 2025",
           slug: "complete-guide-to-tailwind-css",
-          excerpt: "Learn how to use Tailwind CSS effectively in your web projects, from installation to advanced features.",
+          excerpt:
+            "Learn how to use Tailwind CSS effectively in your web projects, from installation to advanced features.",
           content: `Tailwind CSS has revolutionized the way developers approach styling in web applications. Unlike traditional CSS frameworks that provide pre-designed components, Tailwind offers low-level utility classes that let you build completely custom designs without leaving your HTML.
 
 ## Getting Started with Tailwind CSS
@@ -302,7 +306,8 @@ Tailwind CSS has introduced several new features in 2025 that make it even more 
         {
           title: "Building a Full-Stack Application with Next.js and Convex",
           slug: "building-with-nextjs-and-convex",
-          excerpt: "Learn how to create a modern full-stack application using Next.js for the frontend and Convex for the backend.",
+          excerpt:
+            "Learn how to create a modern full-stack application using Next.js for the frontend and Convex for the backend.",
           content: `In this tutorial, we'll build a complete full-stack application using Next.js for the frontend and Convex as our backend database and API layer. This combination provides a powerful, yet simple foundation for building modern web applications.
 
 ## What is Convex?

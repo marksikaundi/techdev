@@ -17,24 +17,24 @@ export const createPost = mutation({
   },
   handler: async (ctx, args) => {
     const now = new Date().toISOString();
-    
+
     // Check if a post with this slug already exists
     const existingPosts = await ctx.db
       .query("posts")
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .collect();
-    
+
     if (existingPosts.length > 0) {
       throw new Error("A post with this slug already exists");
     }
-    
+
     const postId = await ctx.db.insert("posts", {
       ...args,
       views: 0,
       publishedAt: args.status === "published" ? now : undefined,
       updatedAt: now,
     });
-    
+
     return postId;
   },
 });
@@ -54,36 +54,36 @@ export const updatePost = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...fields } = args;
-    
+
     // Get the current post data
     const post = await ctx.db.get(id);
     if (!post) {
       throw new Error("Post not found");
     }
-    
+
     // Check for slug change and verify uniqueness
     if (fields.slug && fields.slug !== post.slug) {
       const existingPosts = await ctx.db
         .query("posts")
         .withIndex("by_slug", (q) => q.eq("slug", fields.slug as string))
         .collect();
-      
+
       if (existingPosts.length > 0) {
         throw new Error("A post with this slug already exists");
       }
     }
-    
+
     // Update publishedAt if status is changing to published
     const now = new Date().toISOString();
     const updates: any = { ...fields };
-    
+
     if (fields.status === "published" && post.status !== "published") {
       updates.publishedAt = now;
     }
-    
+
     // Always update updatedAt
     updates.updatedAt = now;
-    
+
     await ctx.db.patch(id, fields);
     return id;
   },
@@ -95,17 +95,17 @@ export const deletePost = mutation({
   handler: async (ctx, args) => {
     // Delete the post
     await ctx.db.delete(args.id);
-    
+
     // Delete associated comments
     const comments = await ctx.db
       .query("comments")
       .withIndex("by_postId", (q) => q.eq("postId", args.id))
       .collect();
-    
+
     for (const comment of comments) {
       await ctx.db.delete(comment._id);
     }
-    
+
     return args.id;
   },
 });
@@ -118,10 +118,10 @@ export const incrementPostView = mutation({
     if (!post) {
       throw new Error("Post not found");
     }
-    
+
     const currentViews = post.views || 0;
     await ctx.db.patch(args.id, { views: currentViews + 1 });
-    
+
     return args.id;
   },
 });
@@ -139,11 +139,11 @@ export const createCategory = mutation({
       .query("categories")
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .collect();
-    
+
     if (existingCategories.length > 0) {
       throw new Error("A category with this slug already exists");
     }
-    
+
     const categoryId = await ctx.db.insert("categories", args);
     return categoryId;
   },
@@ -159,25 +159,25 @@ export const updateCategory = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...fields } = args;
-    
+
     // Get the current category data
     const category = await ctx.db.get(id);
     if (!category) {
       throw new Error("Category not found");
     }
-    
+
     // Check for slug change and verify uniqueness
     if (fields.slug && fields.slug !== category.slug) {
       const existingCategories = await ctx.db
         .query("categories")
         .withIndex("by_slug", (q) => q.eq("slug", fields.slug as string))
         .collect();
-      
+
       if (existingCategories.length > 0) {
         throw new Error("A category with this slug already exists");
       }
     }
-    
+
     await ctx.db.patch(id, fields);
     return id;
   },
@@ -207,16 +207,16 @@ export const createUser = mutation({
       .query("users")
       .withIndex("by_email", (q) => q.eq("email", args.email))
       .collect();
-    
+
     if (existingUsers.length > 0) {
       throw new Error("A user with this email already exists");
     }
-    
+
     const userId = await ctx.db.insert("users", {
       ...args,
       lastLogin: "Never",
     });
-    
+
     return userId;
   },
 });
@@ -234,25 +234,25 @@ export const updateUser = mutation({
   },
   handler: async (ctx, args) => {
     const { id, ...fields } = args;
-    
+
     // Get the current user data
     const user = await ctx.db.get(id);
     if (!user) {
       throw new Error("User not found");
     }
-    
+
     // Check for email change and verify uniqueness
     if (fields.email && fields.email !== user.email) {
       const existingUsers = await ctx.db
         .query("users")
         .withIndex("by_email", (q) => q.eq("email", fields.email as string))
         .collect();
-      
+
       if (existingUsers.length > 0) {
         throw new Error("A user with this email already exists");
       }
     }
-    
+
     await ctx.db.patch(id, fields);
     return id;
   },
@@ -288,12 +288,12 @@ export const addComment = mutation({
   },
   handler: async (ctx, args) => {
     const now = new Date().toISOString();
-    
+
     const commentId = await ctx.db.insert("comments", {
       ...args,
       date: now,
     });
-    
+
     return commentId;
   },
 });

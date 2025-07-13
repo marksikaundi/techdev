@@ -32,13 +32,12 @@ import {
 } from "lucide-react";
 import { usePostsAdmin, useSeedData } from "@/hooks/use-convex-admin";
 import { Id } from "@/convex/_generated/dataModel";
-import { capitalize } from "@/lib/utils";
 
 export default function AdminPosts() {
   // Get the posts from Convex
   const { posts, deletePost } = usePostsAdmin();
   const { seedInitialData } = useSeedData();
-
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -59,7 +58,7 @@ export default function AdminPosts() {
           setLoading(false);
         }
       };
-
+      
       seedData();
     }
   }, [posts, seedInitialData]);
@@ -69,10 +68,10 @@ export default function AdminPosts() {
     if (!dateString) return "N/A";
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
+      return date.toLocaleDateString('en-US', { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric' 
       });
     } catch (e) {
       return "N/A";
@@ -84,7 +83,7 @@ export default function AdminPosts() {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this post?"
     );
-
+    
     if (confirmDelete) {
       setLoading(true);
       try {
@@ -106,17 +105,17 @@ export default function AdminPosts() {
         const matchesSearch = post.title
           .toLowerCase()
           .includes(searchQuery.toLowerCase());
-
+        
         // Apply status filter
-        const matchesStatus =
-          statusFilter === "all" ||
+        const matchesStatus = 
+          statusFilter === "all" || 
           post.status.toLowerCase() === statusFilter.toLowerCase();
-
+        
         // Apply category filter
-        const matchesCategory =
-          categoryFilter === "all" ||
+        const matchesCategory = 
+          categoryFilter === "all" || 
           post.category.toLowerCase() === categoryFilter.toLowerCase();
-
+        
         return matchesSearch && matchesStatus && matchesCategory;
       })
     : [];
@@ -125,6 +124,12 @@ export default function AdminPosts() {
   const categories = posts
     ? Array.from(new Set(posts.map((post) => post.category)))
     : [];
+
+  // Helper to capitalize first letter
+  const capitalize = (str: string) => {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
 
   return (
     <div>
@@ -186,8 +191,8 @@ export default function AdminPosts() {
                   All
                 </DropdownMenuItem>
                 {categories.map((category) => (
-                  <DropdownMenuItem
-                    key={category}
+                  <DropdownMenuItem 
+                    key={category} 
                     onClick={() => setCategoryFilter(category)}
                   >
                     {capitalize(category)}
@@ -208,12 +213,8 @@ export default function AdminPosts() {
           </div>
         ) : posts && posts.length === 0 ? (
           <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No posts yet
-            </h3>
-            <p className="text-gray-500 mb-6">
-              Start by creating your first blog post
-            </p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No posts yet</h3>
+            <p className="text-gray-500 mb-6">Start by creating your first blog post</p>
             <Link href="/admin/posts/create">
               <Button className="bg-cyan-500 hover:bg-cyan-600 text-white">
                 <Plus className="h-4 w-4 mr-2" />
@@ -263,15 +264,16 @@ export default function AdminPosts() {
                     </TableCell>
                     <TableCell>{capitalize(post.category)}</TableCell>
                     <TableCell>{post.author}</TableCell>
-                    <TableCell>
-                      {formatDate(post.publishedAt || post.updatedAt)}
-                    </TableCell>
+                    <TableCell>{formatDate(post.publishedAt || post.updatedAt)}</TableCell>
                     <TableCell>{post.views || 0}</TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-2">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button
+                              variant="ghost"
+                              className="h-8 w-8 p-0"
+                            >
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>

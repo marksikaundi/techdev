@@ -27,8 +27,7 @@ export default defineSchema({
     name: v.string(),
     slug: v.string(),
     description: v.optional(v.string()),
-  })
-    .index("by_slug", ["slug"]),
+  }).index("by_slug", ["slug"]),
 
   // Users table
   users: defineTable({
@@ -38,14 +37,13 @@ export default defineSchema({
     status: v.string(), // "active", "inactive", "pending"
     lastLogin: v.optional(v.string()),
     avatar: v.optional(v.string()),
-  })
-    .index("by_email", ["email"]),
+  }).index("by_email", ["email"]),
 
   // Analytics table
   analytics: defineTable({
     pageId: v.string(),
     pageTitle: v.string(),
-    pageUrl: v.string(), 
+    pageUrl: v.string(),
     views: v.number(),
     uniqueVisitors: v.number(),
     date: v.string(),

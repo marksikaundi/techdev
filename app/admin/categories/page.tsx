@@ -53,6 +53,18 @@ import {
   Folder,
 } from "lucide-react";
 
+import { useCategoriesAdmin } from "@/hooks/use-convex-admin";
+import { Id } from "@/convex/_generated/dataModel";
+
+// Define the type for a category
+interface Category {
+  id: Id<"categories"> | number; // Support both Convex IDs and temporary numeric IDs
+  name: string;
+  slug: string;
+  description: string;
+  postsCount: number;
+}
+
 // Form schema for category
 const categoryFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -61,69 +73,27 @@ const categoryFormSchema = z.object({
 });
 
 export default function AdminCategories() {
-  const [categories, setCategories] = useState([
-    {
-      id: 1,
-      name: "Tutorial",
-      slug: "tutorial",
-      description: "Step-by-step guides to learn new skills",
-      postsCount: 12,
-    },
-    {
-      id: 2,
-      name: "React",
-      slug: "react",
-      description: "Everything about React and React ecosystem",
-      postsCount: 8,
-    },
-    {
-      id: 3,
-      name: "TypeScript",
-      slug: "typescript",
-      description: "TypeScript tutorials and best practices",
-      postsCount: 5,
-    },
-    {
-      id: 4,
-      name: "CSS",
-      slug: "css",
-      description: "CSS tips, tricks, and advanced techniques",
-      postsCount: 7,
-    },
-    {
-      id: 5,
-      name: "Tools",
-      slug: "tools",
-      description: "Developer tools and productivity tips",
-      postsCount: 4,
-    },
-    {
-      id: 6,
-      name: "Development",
-      slug: "development",
-      description: "General web development topics",
-      postsCount: 10,
-    },
-    {
-      id: 7,
-      name: "Security",
-      slug: "security",
-      description: "Web security tips and best practices",
-      postsCount: 3,
-    },
-    {
-      id: 8,
-      name: "Animation",
-      slug: "animation",
-      description: "Web animations and interactive experiences",
-      postsCount: 2,
-    },
-  ]);
+  const { categories: convexCategories, categoryCounts, createCategory, updateCategory, deleteCategory } = useCategoriesAdmin();
+  
+  // Map Convex data to our component state format
+  const categories = convexCategories && categoryCounts 
+    ? convexCategories.map(category => ({
+        id: category._id,
+        name: category.name,
+        slug: category.slug,
+        description: category.description || "",
+        postsCount: categoryCounts.find(c => c.slug === category.slug)?.count || 0
+      }))
+    : [];
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<any>(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Check if data is still loading
+  const isDataLoading = convexCategories === undefined || categoryCounts === undefined;
 
   // Initialize form
   const form = useForm<z.infer<typeof categoryFormSchema>>({
@@ -137,42 +107,58 @@ export default function AdminCategories() {
 
   // Handle category form submission
   function onSubmit(values: z.infer<typeof categoryFormSchema>) {
+    // Ensure description is a string, defaulting to empty string if undefined
+    const formattedValues = {
+      ...values,
+      description: values.description || "",
+    };
+
     if (editingCategory) {
-      // Update existing category
-      setCategories(
-        categories.map((cat) =>
-          cat.id === editingCategory.id ? { ...cat, ...values } : cat
-        )
-      );
+      // Update existing category in Convex
+      if (typeof editingCategory.id === 'number') {
+        // This is a temporary ID, cannot update in Convex
+        return;
+      }
+      
+      updateCategory({
+        id: editingCategory.id,
+        name: formattedValues.name,
+        slug: formattedValues.slug,
+        description: formattedValues.description
+      });
       setIsEditOpen(false);
     } else {
-      // Add new category
-      setCategories([
-        ...categories,
-        {
-          id: categories.length + 1,
-          ...values,
-          postsCount: 0,
-        },
-      ]);
+      // Add new category to Convex
+      createCategory({
+        name: formattedValues.name,
+        slug: formattedValues.slug,
+        description: formattedValues.description
+      });
       setIsAddOpen(false);
     }
 
+    setEditingCategory(null);
     form.reset();
   }
 
   // Handle delete category
-  const handleDeleteCategory = (id: number) => {
+  const handleDeleteCategory = (id: Id<"categories"> | number) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this category?"
     );
     if (confirmDelete) {
-      setCategories(categories.filter((cat) => cat.id !== id));
+      if (typeof id === 'number') {
+        // This is a temporary ID, no need to call Convex
+        return;
+      }
+      
+      // Delete from Convex database
+      deleteCategory({ id });
     }
   };
 
   // Handle edit category
-  const handleEditCategory = (category: any) => {
+  const handleEditCategory = (category: Category) => {
     setEditingCategory(category);
     form.reset({
       name: category.name,
@@ -404,12 +390,21 @@ export default function AdminCategories() {
       </Card>
 
       {/* Categories grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        {categories
-          .filter((cat) =>
-            cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((category) => (
+      {isDataLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <p className="text-gray-500">Loading categories...</p>
+        </div>
+      ) : categories.length === 0 ? (
+        <div className="flex justify-center items-center py-12">
+          <p className="text-gray-500">No categories found. Create your first category!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {categories
+            .filter((cat) =>
+              cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .map((category) => (
             <Card key={category.id} className="p-4 border-gray-200 relative">
               <div className="absolute top-4 right-4">
                 <DropdownMenu>
@@ -457,18 +452,28 @@ export default function AdminCategories() {
               </div>
             </Card>
           ))}
-      </div>
+        </div>
+      )}
 
       {/* Category posts count */}
       <Card className="p-6 border-gray-200">
         <h2 className="text-lg font-semibold mb-4">Categories Overview</h2>
-        <div className="space-y-4">
-          {categories
-            .filter((cat) =>
-              cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-            .sort((a, b) => b.postsCount - a.postsCount)
-            .map((category) => (
+        {isDataLoading ? (
+          <div className="flex justify-center items-center py-6">
+            <p className="text-gray-500">Loading categories overview...</p>
+          </div>
+        ) : categories.length === 0 ? (
+          <div className="flex justify-center items-center py-6">
+            <p className="text-gray-500">No categories to display</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {categories
+              .filter((cat) =>
+                cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .sort((a, b) => b.postsCount - a.postsCount)
+              .map((category) => (
               <div key={category.id}>
                 <div className="flex justify-between items-center mb-1">
                   <div className="flex items-center">
@@ -485,7 +490,8 @@ export default function AdminCategories() {
                     <div
                       style={{
                         width: `${Math.min(
-                          (category.postsCount / 12) * 100,
+                          // Calculate percentage based on max post count
+                          (category.postsCount / Math.max(...categories.map(c => c.postsCount), 1)) * 100,
                           100
                         )}%`,
                       }}
@@ -496,7 +502,8 @@ export default function AdminCategories() {
                 <Separator className="mt-4" />
               </div>
             ))}
-        </div>
+          </div>
+        )}
       </Card>
     </div>
   );

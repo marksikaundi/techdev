@@ -14,7 +14,10 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  Form              <form
+                onSubmit={userForm.handleSubmit(onUserSubmit as any)}
+                className="space-y-4"
+              >age,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -61,12 +64,22 @@ const userFormSchema = z.object({
   autoApproveComments: z.boolean(),
 });
 
+// Define types for form values
+type GeneralFormValues = z.infer<typeof generalFormSchema>;
+type EmailFormValues = z.infer<typeof emailFormSchema>;
+type UserFormValues = z.infer<typeof userFormSchema>;
+
 export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState("general");
 
+  // Define types
+  type GeneralFormValues = z.infer<typeof generalFormSchema>;
+  type EmailFormValues = z.infer<typeof emailFormSchema>;
+  type UserFormValues = z.infer<typeof userFormSchema>;
+
   // Initialize general form
-  const generalForm = useForm<z.infer<typeof generalFormSchema>>({
-    resolver: zodResolver(generalFormSchema),
+  const generalForm = useForm<GeneralFormValues>({
+    resolver: zodResolver(generalFormSchema) as any,
     defaultValues: {
       siteName: "Web Dev Insights",
       siteDescription: "Tutorials, guides, and news about web development",
@@ -78,8 +91,8 @@ export default function AdminSettings() {
   });
 
   // Initialize email form
-  const emailForm = useForm<z.infer<typeof emailFormSchema>>({
-    resolver: zodResolver(emailFormSchema),
+  const emailForm = useForm<EmailFormValues>({
+    resolver: zodResolver(emailFormSchema) as any,
     defaultValues: {
       siteEmail: "admin@webdevinsights.com",
       smtpHost: "smtp.example.com",
@@ -91,8 +104,8 @@ export default function AdminSettings() {
   });
 
   // Initialize user form
-  const userForm = useForm<z.infer<typeof userFormSchema>>({
-    resolver: zodResolver(userFormSchema),
+  const userForm = useForm<UserFormValues>({
+    resolver: zodResolver(userFormSchema) as any,
     defaultValues: {
       allowRegistration: true,
       allowComments: true,
@@ -103,19 +116,19 @@ export default function AdminSettings() {
   });
 
   // Handle general form submission
-  function onGeneralSubmit(values: z.infer<typeof generalFormSchema>) {
+  function onGeneralSubmit(values: GeneralFormValues) {
     console.log(values);
     alert("General settings saved successfully!");
   }
 
   // Handle email form submission
-  function onEmailSubmit(values: z.infer<typeof emailFormSchema>) {
+  function onEmailSubmit(values: EmailFormValues) {
     console.log(values);
     alert("Email settings saved successfully!");
   }
 
   // Handle user form submission
-  function onUserSubmit(values: z.infer<typeof userFormSchema>) {
+  function onUserSubmit(values: UserFormValues) {
     console.log(values);
     alert("User settings saved successfully!");
   }
@@ -163,7 +176,7 @@ export default function AdminSettings() {
           <Card className="p-6 border-gray-200">
             <Form {...generalForm}>
               <form
-                onSubmit={generalForm.handleSubmit(onGeneralSubmit)}
+                onSubmit={generalForm.handleSubmit(onGeneralSubmit as any)}
                 className="space-y-6"
               >
                 <FormField
@@ -348,7 +361,7 @@ export default function AdminSettings() {
           <Card className="p-6 border-gray-200">
             <Form {...emailForm}>
               <form
-                onSubmit={emailForm.handleSubmit(onEmailSubmit)}
+                onSubmit={emailForm.handleSubmit(onEmailSubmit as any)}
                 className="space-y-6"
               >
                 <FormField
