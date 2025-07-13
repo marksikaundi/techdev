@@ -100,9 +100,7 @@ export default function AdminDashboard() {
                   </p>
                   <p
                     className={`ml-2 text-sm font-medium ${
-                      stat.increasing
-                        ? "text-green-600"
-                        : "text-red-600"
+                      stat.increasing ? "text-green-600" : "text-red-600"
                     }`}
                   >
                     {stat.change}
@@ -164,9 +162,7 @@ export default function AdminDashboard() {
 
       {/* Recent posts */}
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
-          Recent Posts
-        </h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Posts</h2>
         <Card className="border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">

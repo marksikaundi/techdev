@@ -55,7 +55,8 @@ export default function EditPost({ params }: { params: { id: string } }) {
   const postData = {
     id: 1,
     title: "Getting Started with Next.js: A Complete Guide for Beginners",
-    excerpt: "Learn the fundamentals of Next.js and start building modern React applications.",
+    excerpt:
+      "Learn the fundamentals of Next.js and start building modern React applications.",
     content: `Next.js has become one of the most popular React frameworks for building modern web applications. With its powerful features like server-side rendering, static site generation, and built-in routing, Next.js provides an excellent developer experience while ensuring optimal performance for your users.
 
 ## What is Next.js?
@@ -308,10 +309,7 @@ Some of the key features of Next.js include:
                         </FormControl>
                         <SelectContent>
                           {statuses.map((status) => (
-                            <SelectItem
-                              key={status.value}
-                              value={status.value}
-                            >
+                            <SelectItem key={status.value} value={status.value}>
                               {status.label}
                             </SelectItem>
                           ))}
@@ -394,9 +392,7 @@ Some of the key features of Next.js include:
               ) : (
                 <div className="text-center">
                   <ImageIcon className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">
-                    No image selected
-                  </p>
+                  <p className="text-sm text-gray-500">No image selected</p>
                 </div>
               )}
             </div>
@@ -415,9 +411,7 @@ Some of the key features of Next.js include:
 
           <Card className="p-6 border-gray-200">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-gray-900">
-                Delete Post
-              </h3>
+              <h3 className="text-lg font-medium text-gray-900">Delete Post</h3>
             </div>
             <p className="text-sm text-gray-500 mb-4">
               This action cannot be undone. This will permanently delete this

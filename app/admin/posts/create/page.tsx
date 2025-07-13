@@ -241,10 +241,7 @@ export default function CreatePost() {
                         </FormControl>
                         <SelectContent>
                           {statuses.map((status) => (
-                            <SelectItem
-                              key={status.value}
-                              value={status.value}
-                            >
+                            <SelectItem key={status.value} value={status.value}>
                               {status.label}
                             </SelectItem>
                           ))}
@@ -327,9 +324,7 @@ export default function CreatePost() {
               ) : (
                 <div className="text-center">
                   <ImageIcon className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">
-                    No image selected
-                  </p>
+                  <p className="text-sm text-gray-500">No image selected</p>
                 </div>
               )}
             </div>
