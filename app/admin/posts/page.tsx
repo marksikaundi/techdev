@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { usePostsAdmin, useSeedData } from "@/hooks/use-convex-admin";
 import { Id } from "@/convex/_generated/dataModel";
+import { capitalize } from "@/lib/utils";
 
 export default function AdminPosts() {
   // Get the posts from Convex
@@ -124,12 +125,6 @@ export default function AdminPosts() {
   const categories = posts
     ? Array.from(new Set(posts.map((post) => post.category)))
     : [];
-
-  // Helper to capitalize first letter
-  const capitalize = (str: string) => {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
 
   return (
     <div>
