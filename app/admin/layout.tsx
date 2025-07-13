@@ -12,6 +12,7 @@ import {
   FileText,
   Grid,
   LogOut,
+  Kanban,
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -46,6 +47,11 @@ export default function AdminLayout({
       name: "Users",
       href: "/admin/users",
       icon: Users,
+    },
+    {
+      name: "Studio",
+      href: "/admin/studio",
+      icon: Kanban,
     },
     {
       name: "Analytics",
