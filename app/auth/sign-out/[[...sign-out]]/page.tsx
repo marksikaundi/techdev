@@ -1,3 +1,5 @@
+"use client";
+
 import { SignOutButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
@@ -10,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function SignOutPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] gap-8">
-      <div className="bg-card p-8 rounded-lg shadow-lg w-full max-w-md border">
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="w-full max-w-md bg-card p-8 rounded-lg shadow-lg border">
         <h1 className="text-2xl font-bold text-center mb-6">Sign Out</h1>
         <p className="text-center text-muted-foreground mb-8">
           Are you sure you want to sign out?
