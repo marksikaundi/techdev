@@ -77,15 +77,11 @@ export function UserProfile({ user }: { user: ExtendedUserResource }) {
       <div className="flex items-center gap-x-6">
         <Avatar className="h-20 w-20">
           <AvatarImage src={user.avatarUrl} alt={form.getValues().fullName} />
-          <AvatarFallback>
-            {user.initials}
-          </AvatarFallback>
+          <AvatarFallback>{user.initials}</AvatarFallback>
         </Avatar>
         <div>
           <h2 className="text-xl font-semibold">{form.getValues().fullName}</h2>
-          <p className="text-sm text-muted-foreground">
-            {user.primaryEmail}
-          </p>
+          <p className="text-sm text-muted-foreground">{user.primaryEmail}</p>
         </div>
       </div>
 

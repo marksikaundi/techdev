@@ -16,7 +16,7 @@ import { adaptUserToExtendedResource } from "@/lib/clerk-adapter";
 export default async function SettingsPage() {
   const { userId } = await auth();
   const clerkUser = await currentUser();
-  
+
   if (!userId || !clerkUser) {
     redirect("/auth/sign-in");
   }

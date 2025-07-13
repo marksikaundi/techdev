@@ -58,7 +58,11 @@ export function AccountSettings({ user }: { user: ExtendedUserResource }) {
   const defaultValues: Partial<AccountFormValues> = {
     email: user.primaryEmail,
     notifications: user.preferences.notifications,
-    newsletterFrequency: user.preferences.newsletterFrequency as "daily" | "weekly" | "monthly" | "never",
+    newsletterFrequency: user.preferences.newsletterFrequency as
+      | "daily"
+      | "weekly"
+      | "monthly"
+      | "never",
   };
 
   const form = useForm<AccountFormValues>({
