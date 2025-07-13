@@ -9,10 +9,7 @@ export const getPlanningBoards = query({
   args: {},
   handler: async (ctx) => {
     // Get all boards ordered by their order property
-    const boards = await ctx.db
-      .query("planningBoards")
-      .order("asc")
-      .collect();
+    const boards = await ctx.db.query("planningBoards").order("asc").collect();
 
     // For each board, get its tasks
     const boardsWithTasks = await Promise.all(
@@ -219,7 +216,7 @@ export const deletePlanningTask = mutation({
     if (!task) {
       throw new Error("Task not found");
     }
-    
+
     try {
       await ctx.db.delete(args.id);
       return args.id;
