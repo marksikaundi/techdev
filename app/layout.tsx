@@ -32,9 +32,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <ConvexClientProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          {/* We don't need the header or footer for the admin section 
+              since those are handled in the admin layout */}
+          {children}
           <Toaster position="bottom-right" />
         </ConvexClientProvider>
       </body>
