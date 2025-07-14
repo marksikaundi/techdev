@@ -227,11 +227,13 @@ export default function ResourcesPage() {
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-xl font-bold">{course.title}</h3>
-                        <Badge variant={course.free ? "success" : "secondary"}>
+                        <Badge variant={course.free ? "default" : "secondary"}>
                           {course.free ? "Free" : course.price}
                         </Badge>
                       </div>
-                      <p className="text-slate-600 mb-4">{course.description}</p>
+                      <p className="text-slate-600 mb-4">
+                        {course.description}
+                      </p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         <Badge variant="outline" className="flex items-center">
                           <Info className="h-3 w-3 mr-1" />
@@ -270,7 +272,7 @@ export default function ResourcesPage() {
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-lg font-bold">{ebook.title}</h3>
-                        <Badge variant={ebook.free ? "success" : "secondary"}>
+                        <Badge variant={ebook.free ? "default" : "secondary"}>
                           {ebook.free ? "Free" : ebook.price}
                         </Badge>
                       </div>
@@ -350,11 +352,7 @@ export default function ResourcesPage() {
                     <div className="p-6">
                       <h3 className="text-xl font-bold mb-2">{sheet.title}</h3>
                       <p className="text-slate-600 mb-4">{sheet.description}</p>
-                      <Button
-                        asChild
-                        className="w-full"
-                        variant="outline"
-                      >
+                      <Button asChild className="w-full" variant="outline">
                         <Link href={sheet.downloadLink}>
                           <FileText className="mr-2 h-4 w-4" />
                           Download PDF
@@ -435,10 +433,12 @@ export default function ResourcesPage() {
 
           {/* Resource Request */}
           <div className="bg-slate-50 p-6 rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">Can't find what you need?</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Can't find what you need?
+            </h2>
             <p className="text-slate-600 mb-4">
-              If you're looking for a specific resource that's not available yet,
-              let us know and we'll consider adding it to our collection.
+              If you're looking for a specific resource that's not available
+              yet, let us know and we'll consider adding it to our collection.
             </p>
             <Button asChild>
               <Link href="/contact">Request a Resource</Link>
