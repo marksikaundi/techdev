@@ -10,7 +10,7 @@ export default function PageLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAdminPage = pathname?.startsWith('/admin');
+  const isAdminPage = pathname?.startsWith("/admin");
 
   return (
     <>
